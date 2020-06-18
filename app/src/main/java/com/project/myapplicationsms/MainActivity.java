@@ -1,23 +1,13 @@
 package com.project.myapplicationsms;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.project.myapplicationsms.observe.SmsContent;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import android.os.Handler;
-import android.provider.Telephony;
 import android.util.Log;
-import android.view.View;
-
-import android.view.Menu;
-import android.view.MenuItem;
 
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;

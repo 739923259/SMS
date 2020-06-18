@@ -34,7 +34,13 @@ public class MineFragment extends BaseFragment {
             view=inflater.inflate(R.layout.fragment_mine_layout,null,false);
         }
         authStateFragmentSuccess=new AuthStateFragment();
+        Bundle bundleS=new Bundle();
+        bundleS.putInt("type",1);
+        authStateFragmentSuccess.setArguments(bundleS);
         authStateFragmentFail=new AuthStateFragment();
+        Bundle bundleF=new Bundle();
+        bundleF.putInt("type",2);
+        authStateFragmentFail.setArguments(bundleF);
         initView();
         return view;
     }

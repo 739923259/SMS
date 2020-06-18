@@ -1,8 +1,10 @@
 package com.project.myapplicationsms.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +18,7 @@ import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.fragment.EquipmentInfoFragment;
 import com.project.myapplicationsms.fragment.EquipmentOnlineFragment;
 import com.project.myapplicationsms.fragment.MineFragment;
+import com.project.myapplicationsms.observe.SmsContent;
 import com.project.myapplicationsms.utils.LogUtils;
 import com.project.myapplicationsms.widget.BottomBarView;
 
@@ -32,6 +35,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private BaseFragment findBusinessFragment;
     private ViewPager viewPager;
     private List<Fragment> fragments;
+    private SmsContent smsContent;
 
 
 
@@ -47,6 +51,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         viewPager=findViewById(R.id.fragment_container);
         initFragment();
         initBottom();
+        smsContent = new SmsContent(new Handler(), this);
+        getContentResolver().registerContentObserver(
+                Uri.parse("content://sms/"), true, smsContent);
     }
 
     public void initFragment() {
@@ -160,6 +167,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         if (state == ViewPager.SCROLL_STATE_IDLE) {
             viewPager.scrollBy(1, 0);
         }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(smsContent!=null){
+            getContentResolver().unregisterContentObserver(smsContent);
+        }
     }
 }

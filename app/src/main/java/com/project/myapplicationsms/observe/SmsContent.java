@@ -1,7 +1,6 @@
-package com.project.myapplicationsms;
+package com.project.myapplicationsms.observe;
 
 import android.app.Activity;
-import android.database.ContentObservable;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
