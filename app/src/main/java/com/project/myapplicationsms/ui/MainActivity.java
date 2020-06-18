@@ -18,6 +18,7 @@ import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.fragment.EquipmentInfoFragment;
 import com.project.myapplicationsms.fragment.EquipmentOnlineFragment;
 import com.project.myapplicationsms.fragment.MineFragment;
+import com.project.myapplicationsms.observe.MonitorService;
 import com.project.myapplicationsms.observe.SmsContent;
 import com.project.myapplicationsms.utils.LogUtils;
 import com.project.myapplicationsms.widget.BottomBarView;
@@ -35,8 +36,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private BaseFragment findBusinessFragment;
     private ViewPager viewPager;
     private List<Fragment> fragments;
-    private SmsContent smsContent;
 
+    private Intent serviceIntent;
 
 
     @Override
@@ -51,10 +52,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         viewPager=findViewById(R.id.fragment_container);
         initFragment();
         initBottom();
-        smsContent = new SmsContent(new Handler(), this);
-        getContentResolver().registerContentObserver(
-                Uri.parse("content://sms/"), true, smsContent);
+
+        serviceIntent = new Intent(MainActivity.this, MonitorService.class);
+        serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(serviceIntent);
+
     }
+
 
     public void initFragment() {
         fragments=new ArrayList<>();
@@ -172,8 +176,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(smsContent!=null){
-            getContentResolver().unregisterContentObserver(smsContent);
+
+        if(serviceIntent!=null){
+            startService(serviceIntent);
         }
     }
 }

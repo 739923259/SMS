@@ -1,6 +1,7 @@
 package com.project.myapplicationsms.observe;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,10 +12,10 @@ public  class SmsContent extends ContentObserver {
     private static final String TAG = SmsContent.class.getSimpleName();
     private static final String MARKER = "YOUR_KEYWORD";
     private Cursor cursor = null;
-    private Activity mActivity;
+    private Context mActivity;
 
 
-    public SmsContent(Handler handler, Activity activity) {
+    public SmsContent(Handler handler, Context activity) {
         super(handler);
         this.mActivity = activity;
     }
