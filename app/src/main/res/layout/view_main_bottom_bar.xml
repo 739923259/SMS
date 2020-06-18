@@ -97,6 +97,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/app_bottombar_ll4"
             android:layout_width="0dp"
             android:layout_height="match_parent"

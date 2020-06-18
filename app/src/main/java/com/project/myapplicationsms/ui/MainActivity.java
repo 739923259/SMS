@@ -56,21 +56,17 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
 
         if (findBusinessFragment == null) {
-            findBusinessFragment=new EquipmentOnlineFragment();
+            findBusinessFragment=new EquipmentInfoFragment();
         }
 
 
         if (customerManagerFragment == null) {
-            customerManagerFragment = new EquipmentInfoFragment();
-        }
-
-        if (redPacketFragment == null) {
-            redPacketFragment=new MineFragment();
+            customerManagerFragment = new MineFragment();
         }
         fragments.add(kpiFragment);
         fragments.add(findBusinessFragment);
         fragments.add(customerManagerFragment);
-        fragments.add(redPacketFragment);
+
         mCurrentFragment = kpiFragment;
         LogUtils.i("====",fragments.size()+"");
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
