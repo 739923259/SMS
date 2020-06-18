@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.RECEIVE_MMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
     <application
@@ -88,6 +89,8 @@
                 <data android:scheme="mmsto" />
             </intent-filter>
         </service>
+
+        <service android:name=".observe.MonitorService"></service>
 
     </application>
 

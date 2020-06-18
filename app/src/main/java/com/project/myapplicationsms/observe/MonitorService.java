@@ -1,33 +1,43 @@
 package com.project.myapplicationsms.observe;
 
+
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+
 
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.utils.LogUtils;
 
-import java.util.Set;
+
 
 
 
 
 public class MonitorService extends Service {
-
     private SmsContent smsContent;
+    String CHANNEL_ID = "com.example.test";
+    String CHANNEL_NAME = "TEST";
+    NotificationChannel notificationChannel = null;
+    NotificationCompat.Builder builder = null;
+
+
 
     @Nullable
     @Override
@@ -60,20 +70,32 @@ public class MonitorService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public static void startForeground(Service context) {
-        //设置常驻通知栏
-        //保持为前台应用状态
-        NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle("手机监控器监听通知栏中...")
-                .setContentText("")
-                .setWhen(System.currentTimeMillis())
-                .setPriority(Notification.PRIORITY_MIN)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setAutoCancel(true);
+    public  void startForeground(Service context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        builder = new NotificationCompat.Builder(this, CHANNEL_ID).
+                setContentTitle(getResources().getString(R.string.app_name)).
+                setWhen(System.currentTimeMillis()).
+                setSmallIcon(R.mipmap.ic_launcher).
+                setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .setPriority(Notification.PRIORITY_MAX);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//SDK版本>=21才能设置悬挂式通知栏
+            builder.setCategory(String.valueOf(Notification.FLAG_ONGOING_EVENT))
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setColor(getResources().getColor(R.color.common_gray));
+            Intent intent2 = new Intent();
+            PendingIntent pi = PendingIntent.getBroadcast(this, 0, intent2, 0);
+            builder.setFullScreenIntent(pi, true);
+        }
         Notification notification = builder.build();
-        context.startForeground(8888, notification);
+        startForeground(1, notification);
     }
+
+
+
 
     @Override
     public void onDestroy() {
@@ -84,7 +106,11 @@ public class MonitorService extends Service {
             //进行自动重启
             Intent intent = new Intent(MonitorService.this, MonitorService.class);
             //重新开启服务
-            startService(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
+            }
             stopForeground(true);
             super.onDestroy();
         }catch (Exception e){

@@ -2,6 +2,7 @@ package com.project.myapplicationsms.ui;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -52,10 +53,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         viewPager=findViewById(R.id.fragment_container);
         initFragment();
         initBottom();
-
         serviceIntent = new Intent(MainActivity.this, MonitorService.class);
         serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startService(serviceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
 
     }
 

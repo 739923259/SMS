@@ -45,7 +45,7 @@ public  class SmsContent extends ContentObserver {
             if (cursor.moveToFirst()) {
                 int id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String body = cursor.getString(cursor.getColumnIndex("body"));
-                Log.d(TAG, "sms id: " + id + "\nsms body: " + body);
+                Log.d("====", "sms id: " + id + "\nsms body: " + body);
                 cursor.close();
 
             }
