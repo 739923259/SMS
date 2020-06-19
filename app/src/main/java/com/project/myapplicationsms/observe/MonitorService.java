@@ -100,19 +100,15 @@ public class MonitorService extends Service {
     @Override
     public void onDestroy() {
         try {
+            super.onDestroy();
             if(smsContent!=null){
                 getContentResolver().unregisterContentObserver(smsContent);
             }
-            //进行自动重启
-            Intent intent = new Intent(MonitorService.this, MonitorService.class);
-            //重新开启服务
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent);
-            } else {
-                startService(intent);
-            }
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction("restartservice");
+            broadcastIntent.setClass(this, Restarter.class);
+            this.sendBroadcast(broadcastIntent);
             stopForeground(true);
-            super.onDestroy();
         }catch (Exception e){
 
         }

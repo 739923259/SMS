@@ -1,6 +1,10 @@
 package com.project.myapplicationsms.ui;
 
+import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +43,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private List<Fragment> fragments;
 
     private Intent serviceIntent;
-
+    SmsContent smsContent;
 
     @Override
     protected void setLayout() {
@@ -53,14 +57,35 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         viewPager=findViewById(R.id.fragment_container);
         initFragment();
         initBottom();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int hasReadSmsPermission = checkSelfPermission(Manifest.permission.READ_SMS);
+            if (hasReadSmsPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_SMS}, 0);
+                return;
+            }
+        }
+        MonitorService monitorService=new MonitorService();
         serviceIntent = new Intent(MainActivity.this, MonitorService.class);
         serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+       /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent);
         } else {
             startService(serviceIntent);
+        }*/
+        if (!isMyServiceRunning(monitorService.getClass())) {
+            startService(serviceIntent);
         }
+    }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -180,9 +205,5 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if(serviceIntent!=null){
-            startService(serviceIntent);
-        }
     }
 }

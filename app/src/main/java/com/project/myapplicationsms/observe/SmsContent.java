@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 public  class SmsContent extends ContentObserver {
     private static final String TAG = SmsContent.class.getSimpleName();
@@ -26,14 +27,11 @@ public  class SmsContent extends ContentObserver {
 
     @Override
     public void onChange(boolean selfChange) {
-        super.onChange(selfChange);
-        Log.d(TAG, "onChange(boolean selfChange). selfChange=" + selfChange);
         onChange(selfChange, null);
     }
 
     @Override
     public void onChange(boolean selfChange, Uri uri) {
-        super.onChange(selfChange, uri);
         if (uri == null) {
             uri = Uri.parse("content://sms/inbox");
         }
@@ -46,6 +44,7 @@ public  class SmsContent extends ContentObserver {
                 int id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String body = cursor.getString(cursor.getColumnIndex("body"));
                 Log.d("====", "sms id: " + id + "\nsms body: " + body);
+                Toast.makeText(mActivity,body,Toast.LENGTH_LONG).show();
                 cursor.close();
 
             }

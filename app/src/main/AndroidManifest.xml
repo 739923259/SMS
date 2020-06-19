@@ -90,7 +90,16 @@
             </intent-filter>
         </service>
 
-        <service android:name=".observe.MonitorService"></service>
+        <service  android:enabled="true" android:name=".observe.MonitorService"   android:process="system"></service>
+
+        <receiver
+        android:name=".observe.Restarter"
+        android:enabled="true"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="restartservice" />
+        </intent-filter>
+    </receiver>
 
     </application>
 
