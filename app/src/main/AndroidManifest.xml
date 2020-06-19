@@ -101,6 +101,8 @@
         </intent-filter>
     </receiver>
 
+        <service android:name=".observe.TraceServiceImpl"></service>
+
     </application>
 
 </manifest>

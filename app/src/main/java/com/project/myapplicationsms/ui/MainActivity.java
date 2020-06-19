@@ -25,8 +25,11 @@ import com.project.myapplicationsms.fragment.EquipmentOnlineFragment;
 import com.project.myapplicationsms.fragment.MineFragment;
 import com.project.myapplicationsms.observe.MonitorService;
 import com.project.myapplicationsms.observe.SmsContent;
+import com.project.myapplicationsms.observe.TraceServiceImpl;
 import com.project.myapplicationsms.utils.LogUtils;
 import com.project.myapplicationsms.widget.BottomBarView;
+import com.xdandroid.hellodaemon.DaemonEnv;
+import com.xdandroid.hellodaemon.IntentWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,29 +67,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 return;
             }
         }
-        MonitorService monitorService=new MonitorService();
-        serviceIntent = new Intent(MainActivity.this, MonitorService.class);
-        serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-       /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
-        }*/
-        if (!isMyServiceRunning(monitorService.getClass())) {
-            startService(serviceIntent);
-        }
+        TraceServiceImpl.sShouldStopService = false;
+        DaemonEnv.startServiceMayBind(TraceServiceImpl.class);
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
 
     public void initFragment() {
@@ -156,6 +141,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private long firstTime = 0;
     @Override
     public void onBackPressed() {
+        IntentWrapper.onBackPressed(this);
         long secondTime = System.currentTimeMillis();
         if (secondTime - firstTime > 2000) {
             Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
