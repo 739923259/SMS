@@ -39,6 +39,7 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.2'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.31'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    compile 'com.xdandroid:hellodaemon:+'
 
 
 }
