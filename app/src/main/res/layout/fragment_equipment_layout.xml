@@ -25,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:id="@+id/et_url"
                 android:textSize="14sp"
                 android:background="@null"
                 android:textColor="#666"
@@ -59,6 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:id="@+id/et_sign"
                 android:textSize="14sp"
                 android:background="@null"
                 android:textColor="#666"
@@ -74,6 +76,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_submit"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"

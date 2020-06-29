@@ -1,5 +1,6 @@
 package com.project.myapplicationsms.http;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -14,7 +15,11 @@ import com.project.myapplicationsms.network.HttpRequestParam;
 import com.project.myapplicationsms.network.ServerResult;
 import com.project.myapplicationsms.network.ServerResultHeader;
 import com.project.myapplicationsms.utils.NetworkUtils;
+import com.project.myapplicationsms.utils.SystemUtil;
 
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -112,6 +117,43 @@ public class NetApiUtil {
         }
         return resTagList;
     }
+
+
+
+
+
+
+    public static final ServerResult<UserLoginBean> postUserAuth(String url, String signKey, Context context) {
+
+        try {
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("url", url);
+            jsonParams.put("signKey", signKey);
+            jsonParams.put("macCode", SystemUtil.getMac(context));
+            jsonParams.put("deviceName",SystemUtil.getSystemModel());
+            HashMap<String, String> paramsMap = new HashMap<>();
+            HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
+            HttpCommon httpCommon = new HttpCommon(ApiUrlManager.API_INNER_SORSI, new NetConnectionIntercepter());
+            ServerResultHeader csResult = httpCommon.getResponseAsCsResultPostBody(paramsMap, jsonParams.toString());
+            ServerResult<UserLoginBean> resTagList = new ServerResult<UserLoginBean>();
+            if (csResult != null) {
+                String responseStr = csResult.getResponseJson();
+                resTagList.setCsResult(csResult);
+                if (!TextUtils.isEmpty(responseStr)) {
+                    try {
+                        UserLoginBean userLogin = new Gson().fromJson(responseStr, UserLoginBean.class);
+                        resTagList.itemList.add(userLogin);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return resTagList;
+        }catch (Exception e){
+            return   new ServerResult<UserLoginBean>();
+        }
+    }
+
 
 
    /* public static final ServerResult<ShopListBean> postShopDataList(String latitue, String longitude, int crawler) {
