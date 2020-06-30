@@ -18,7 +18,11 @@ import com.project.myapplicationsms.bean.QiniuSettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.network.ServerResult;
+import com.project.myapplicationsms.utils.StringUtils;
+import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
+
+import java.util.Date;
 
 
 public class EquipmentOnlineFragment  extends BaseFragment implements View.OnClickListener {
@@ -64,7 +68,23 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.tv_submit){
-            submitData();
+           // submitData();
+            String input="您尾号7293的储蓄卡6月12日7时49分支付宝提现收入人民币500.09元,活期余额611.33元。[建设银行]";
+            pasreSMS(input);
         }
+    }
+
+    public void pasreSMS(String body){
+        String amount= StringUtils.parseInMoney(body);
+        String cardNo=StringUtils.parseBankLastFour(body);
+        String bankName=StringUtils.parseBankName(body);
+        String createTime=new Date().getTime()+"";
+        String macCode= SystemUtil.getMac(getActivity());
+        ThreadUtil.executeMore(new Runnable() {
+            @Override
+            public void run() {
+                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(amount,cardNo,bankName,getActivity());
+            }
+        });
     }
 }

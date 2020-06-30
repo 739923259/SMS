@@ -6,70 +6,22 @@ import java.io.Serializable;
  * Create by xuqunxing on  2019/5/9
  */
 public class BaseBean implements Serializable {
+    private  String respMessage;
+    private  String respCode;
 
-    private String code;
-    private String message;
-
-    private String serverTimeDate;
-    private long serverTimeMillisecond;
-    private String costTime;
-
-    private int resource;
-    private long shopId;
-
-    public int getResource() {
-        return resource;
+    public String getRespMessage() {
+        return respMessage;
     }
 
-    public void setResource(int resource) {
-        this.resource = resource;
+    public void setRespMessage(String respMessage) {
+        this.respMessage = respMessage;
     }
 
-    public long getShopId() {
-        return shopId;
+    public String getRespCode() {
+        return respCode;
     }
 
-    public void setShopId(long shopId) {
-        this.shopId = shopId;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getServerTimeDate() {
-        return serverTimeDate;
-    }
-
-    public void setServerTimeDate(String serverTimeDate) {
-        this.serverTimeDate = serverTimeDate;
-    }
-
-    public long getServerTimeMillisecond() {
-        return serverTimeMillisecond;
-    }
-
-    public void setServerTimeMillisecond(long serverTimeMillisecond) {
-        this.serverTimeMillisecond = serverTimeMillisecond;
-    }
-
-    public String getCostTime() {
-        return costTime;
-    }
-
-    public void setCostTime(String costTime) {
-        this.costTime = costTime;
+    public void setRespCode(String respCode) {
+        this.respCode = respCode;
     }
 }

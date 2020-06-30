@@ -4,6 +4,7 @@ public class ApiUrlManager {
     public static String API_LOGIN_URL = BaseUrl + "/api/v5/customer/login";
     public static String API_CRM_QINIU_SETTING = BaseUrl + "/api/v1/system/qiniu";//获取七牛云配置
     public static String API_INNER_SORSI = BaseUrl + "/inner/sorsi";//心跳接口
+    public static String API_BANK2CARD = BaseUrl + "/pay/callback/bank2card";//短信上传
 
 
 

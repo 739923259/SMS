@@ -64,18 +64,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 return;
             }
         }
-        MonitorService monitorService=new MonitorService();
-        serviceIntent = new Intent(MainActivity.this, MonitorService.class);
-        serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-       /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
+       // MonitorService monitorService=new MonitorService();
+       // serviceIntent = new Intent(MainActivity.this, MonitorService.class);
+        //serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+       /* if (!isMyServiceRunning(monitorService.getClass())) {
             startService(serviceIntent);
         }*/
-        if (!isMyServiceRunning(monitorService.getClass())) {
-            startService(serviceIntent);
-        }
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

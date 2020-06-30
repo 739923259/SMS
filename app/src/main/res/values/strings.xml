@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">测试框架</string>
+    <string name="app_name">测试</string>
     <string name="app_kpi_title">业绩看板</string>
     <string name="app_customer_manager_title">客户管理</string>
     <string name="app_red_packet_title">发红包</string>
