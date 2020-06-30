@@ -165,6 +165,7 @@ public class NetApiUtil {
             jsonParams.put("createTime", new Date().getTime()+"");
             jsonParams.put("macCode", SystemUtil.getMac(context));
             jsonParams.put("cardNo",cardNo);
+            jsonParams.put("bankName",bankName);
             jsonParams.put("sign",cardNo);
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);

@@ -7,6 +7,9 @@ import com.project.myapplicationsms.base.Global;
 import com.project.myapplicationsms.network.AppOkHttpClientImpl;
 import com.project.myapplicationsms.network.HttpCommon;
 
+import org.litepal.LitePal;
+import org.litepal.LitePalApplication;
+
 public  class MyApplication  extends Application {
 
     @Override
@@ -15,5 +18,6 @@ public  class MyApplication  extends Application {
         Global.setContext(this);
         Global.setHandler(new Handler());
         HttpCommon.initClient(new AppOkHttpClientImpl());
+        LitePal.initialize(this);
     }
 }

@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import com.project.myapplicationsms.observe.MonitorService;
 import com.project.myapplicationsms.observe.SmsContent;
 import com.project.myapplicationsms.utils.LogUtils;
 import com.project.myapplicationsms.widget.BottomBarView;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 return;
             }
         }
+        SQLiteDatabase db = LitePal.getDatabase();
        // MonitorService monitorService=new MonitorService();
        // serviceIntent = new Intent(MainActivity.this, MonitorService.class);
         //serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

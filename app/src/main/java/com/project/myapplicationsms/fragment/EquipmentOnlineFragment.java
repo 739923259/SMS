@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseFragment;
+import com.project.myapplicationsms.bean.LogBean;
 import com.project.myapplicationsms.bean.QiniuSettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
@@ -22,7 +23,10 @@ import com.project.myapplicationsms.utils.StringUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
 
+import org.litepal.LitePal;
+
 import java.util.Date;
+import java.util.List;
 
 
 public class EquipmentOnlineFragment  extends BaseFragment implements View.OnClickListener {
@@ -54,6 +58,21 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         etSign=view.findViewById(R.id.et_sign);
         tvSubmit=view.findViewById(R.id.tv_submit);
         tvSubmit.setOnClickListener(this);
+        LitePal.deleteAll(LogBean.class);
+        for(int i=0;i<50;i++){
+            LogBean logBean=new LogBean();
+            logBean.setAmount("100");
+            logBean.setCreateTime(new Date().getTime()+"");
+            logBean.setBankName("中国银行"+i);
+            logBean.setCardNo("7777");
+            if(i%2==0){
+                logBean.setAuthSate(1);
+            }else{
+                logBean.setAuthSate(2);
+            }
+            logBean.save();
+        }
+        List<LogBean> allMovies = LitePal.findAll(LogBean.class);
     }
 
     public  void  submitData(){
