@@ -2,6 +2,8 @@ package com.project.myapplicationsms.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,21 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     private EditText etUrl;
     private  EditText etSign;
     private  TextView tvSubmit;
+    private static boolean flag = true;
+    private Handler mHandler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            //在这里执行定时需要的操作
+            if (flag) {
+                mHandler.postDelayed(this, 5000);
+            }
+        }
+    };
+
+    private void stopTimer(){
+        flag = false;
+    }
 
 
     @Nullable
@@ -46,6 +63,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
             view=inflater.inflate(R.layout.fragment_equipment_layout,null,false);
         }
         initView();
+        setTimer();
         return view;
     }
 
@@ -73,6 +91,10 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
             logBean.save();
         }
         List<LogBean> allMovies = LitePal.findAll(LogBean.class);
+    }
+
+    private void setTimer(){
+        mHandler.postDelayed(runnable, 5000);
     }
 
     public  void  submitData(){
@@ -105,5 +127,11 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                 ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(amount,cardNo,bankName,getActivity());
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopTimer();
     }
 }
