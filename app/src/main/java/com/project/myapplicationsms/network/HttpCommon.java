@@ -310,17 +310,10 @@ public class HttpCommon {
         if (!TextUtils.isEmpty(responseStr)) {
             try {
                 JSONObject jsonObject = new JSONObject(responseStr);
-                int authState = jsonObject.optInt("authState");
-                String code = jsonObject.optInt("code") + "";
-                String costTime = jsonObject.optString("costTime");
-                String message = jsonObject.optString("message");
-                String serverTimeDate = jsonObject.optString("serverTimeDate");
-                long serverTimeMillisecond = jsonObject.optLong("serverTimeMillisecond");
-                csResult.setResultCodeMessage(message, Integer.parseInt(code));
-                csResult.setServerTimeDate(serverTimeDate);
-                csResult.setAuthState(authState);
-                csResult.setCostTime(costTime);
-                csResult.setServerTimeMillisecond(serverTimeMillisecond);
+                int code = jsonObject.optInt("respCode");
+                String message = jsonObject.optString("respMessage");
+                csResult.setRespCode(code);
+                csResult.setRespMessage(message);
             } catch (Exception e) {
                 e.printStackTrace();
             }

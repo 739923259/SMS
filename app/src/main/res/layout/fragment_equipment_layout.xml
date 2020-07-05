@@ -88,4 +88,18 @@
         android:textSize="14sp"
         android:background="@drawable/btn_10_conner"
         />
+
+    <TextView
+        android:id="@+id/tv_submit1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="上线"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="#fff"
+        android:textSize="14sp"
+        android:background="@drawable/btn_10_conner"
+        />
 </LinearLayout>

@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class BaseBean implements Serializable {
     private  String respMessage;
-    private  String respCode;
+    private  int respCode;
 
     public String getRespMessage() {
         return respMessage;
@@ -17,11 +17,11 @@ public class BaseBean implements Serializable {
         this.respMessage = respMessage;
     }
 
-    public String getRespCode() {
+    public int getRespCode() {
         return respCode;
     }
 
-    public void setRespCode(String respCode) {
+    public void setRespCode(int respCode) {
         this.respCode = respCode;
     }
 }

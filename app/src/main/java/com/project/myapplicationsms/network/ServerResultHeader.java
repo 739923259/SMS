@@ -10,12 +10,32 @@ import java.io.Serializable;
 public class ServerResultHeader implements Serializable {
 
     private static final long serialVersionUID = 5271302355916459053L;
-    private String message;
+
     private int authState;
     private String serverTimeDate;
     private long serverTimeMillisecond;
     private String costTime;
     private int stockThreshold;
+    private  int respCode;
+    private  String respMessage;
+
+
+    public int getRespCode() {
+        return respCode;
+    }
+
+    public void setRespCode(int respCode) {
+        this.respCode = respCode;
+    }
+
+    public String getRespMessage() {
+        return respMessage;
+    }
+
+    public void setRespMessage(String respMessage) {
+        this.respMessage = respMessage;
+    }
+
     /**
      * 无法访问到服务端的数据
      */
@@ -73,6 +93,7 @@ public class ServerResultHeader implements Serializable {
 
     public void setResultCode(int resultCode) {
         this.resultCode = resultCode;
+        this.respCode=resultCode;
         //网络访问异常时，统一打点，上报当前的网络运营商
 //        if (resultCode != 0) {
 //            String nt = TelephoneUtil.getNT(Global.getContext());
@@ -95,18 +116,20 @@ public class ServerResultHeader implements Serializable {
     }
     public void setResultCodeMessage(String message, int resultCode){
         this.resultCode = resultCode;
-        this.message = message;
+        this.respCode=resultCode;
+        this.respMessage=message;
+
         if (interceptor != null) {
-            interceptor.onIntercept(this.message,this.resultCode);
+            interceptor.onIntercept(message,this.resultCode);
         }
     }
 
     public String getResultMessage() {
-        return message;
+        return respMessage;
     }
 
     public void setResultMessage(String resultMessage) {
-        this.message = resultMessage;
+        this.respMessage = resultMessage;
     }
 
     public int getBodyEncryptType() {
@@ -126,12 +149,10 @@ public class ServerResultHeader implements Serializable {
     }
 
     public String getMessage() {
-        return message;
+        return respMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+
 
     public int getAuthState() {
         return authState;
@@ -192,7 +213,7 @@ public class ServerResultHeader implements Serializable {
     @Override
     public String toString() {
         StringBuffer strBuf = new StringBuffer();
-        strBuf.append("resultCode=" + resultCode + ";").append("resultMessage=" + message + ";");
+        strBuf.append("resultCode=" + resultCode + ";").append("resultMessage=" + respMessage + ";");
         strBuf.append("responseJson=" + responseJson + ";");
         return strBuf.toString();
     }
