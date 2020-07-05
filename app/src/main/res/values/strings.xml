@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">测试</string>
     <string name="app_kpi_title">业绩看板</string>
-    <string name="app_customer_manager_title">客户管理</string>
+    <string name="app_customer_manager_title">日志管理</string>
     <string name="app_red_packet_title">发红包</string>
-    <string name="app_find_title">发现商户</string>
+    <string name="app_find_title">设备信息</string>
     <string name="app_my_title">我的</string>
-    <string name="app_point">积分奖励</string>
+    <string name="app_point">设备上线</string>
 
 
     <!-- 服务端响应码提示 -->

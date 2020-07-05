@@ -1,8 +1,10 @@
 package com.project.myapplicationsms.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,8 @@ import com.project.myapplicationsms.bean.QiniuSettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.network.ServerResult;
+import com.project.myapplicationsms.utils.BaseConfigPreferences;
+import com.project.myapplicationsms.utils.MessageUtils;
 import com.project.myapplicationsms.utils.StringUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
@@ -48,7 +52,9 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         public void run() {
             //在这里执行定时需要的操作
             if (flag) {
-                mHandler.postDelayed(this, 5000);
+                submitData();
+                mHandler.postDelayed(this, 5000*10);
+
             }
         }
     };
@@ -66,7 +72,6 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
             view=inflater.inflate(R.layout.fragment_equipment_layout,null,false);
         }
         initView();
-        setTimer();
         return view;
     }
 
@@ -82,7 +87,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         tvSubmit.setOnClickListener(this);
         tvSubmit1.setOnClickListener(this);
         LitePal.deleteAll(LogBean.class);
-        for(int i=0;i<50;i++){
+       /* for(int i=0;i<50;i++){
             LogBean logBean=new LogBean();
             logBean.setAmount("100");
             logBean.setCreateTime(new Date().getTime()+"");
@@ -95,14 +100,25 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
             }
             logBean.save();
         }
-        List<LogBean> allMovies = LitePal.findAll(LogBean.class);
+        List<LogBean> allMovies = LitePal.findAll(LogBean.class);*/
     }
 
     private void setTimer(){
-        mHandler.postDelayed(runnable, 5000);
+        mHandler.postDelayed(runnable, 5000*10);
     }
 
     public  void  submitData(){
+        if(SystemUtil.isEmulator(getContext())){
+            return ;
+        }
+        if(TextUtils.isEmpty(etUrl.getText().toString())){
+            MessageUtils.show(getActivity(),"请输入云端地址");
+            return;
+        }
+        if(TextUtils.isEmpty(etSign.getText().toString())){
+            MessageUtils.show(getActivity(),"请输入设备key");
+            return;
+        }
         ThreadUtil.executeMore(new Runnable() {
             @Override
             public void run() {
@@ -115,6 +131,8 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             String msg="";
                             if(code==200){
                                 msg="认证成功";
+                                BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
+                                setTimer();
                             }else if(code==4000){
                                 msg="解密失败";
                             }else if(code==5001){
@@ -123,8 +141,14 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 msg="认证失败";
                             }else if(code==5003){
                                 msg="认证成功";
+                                BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
+                                setTimer();
                             }
-                            Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
+                            if(code==5003){
+                                MessageUtils.show(getActivity(),msg);
+                            }else{
+                                MessageUtils.show(getActivity(),msg+"code:"+code);
+                            }
                         }
                     }
                 });
@@ -148,10 +172,58 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         String bankName=StringUtils.parseBankName(body);
         String createTime=new Date().getTime()+"";
         String macCode= SystemUtil.getMac(getActivity());
+        if(SystemUtil.isEmulator(getContext())){
+            return ;
+        }
         ThreadUtil.executeMore(new Runnable() {
             @Override
             public void run() {
                 ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(amount,cardNo,bankName,getActivity());
+                Global.runInMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LogBean logBean=new LogBean();
+                        logBean.setAmount(amount);
+                        logBean.setCreateTime(createTime);
+                        logBean.setBankName(bankName);
+                        logBean.setCardNo(cardNo);
+                        logBean.setSignKey(BaseConfigPreferences.getInstance(getActivity()).getLoginSigin());
+                        if(visitRecordDetail!=null){
+                            int code=visitRecordDetail.getResultCode();
+                            String msg="";
+                            if(code==200){
+                                msg="认证成功";
+                                logBean.setAuthSate(1);
+                            }else if(code==4000){
+                                msg="解密失败";
+                                logBean.setAuthSate(2);
+                            }else if(code==5001){
+                                msg="待认证";
+                                logBean.setAuthSate(2);
+                            }else if(code==6001){
+                                msg="回调失败";
+                                logBean.setAuthSate(2);
+                            }
+                            logBean.save();
+                            if(code==200){
+                                MessageUtils.show(getActivity(),msg);
+                            }else{
+                                MessageUtils.show(getActivity(),msg+"code:"+code);
+                            }
+                            Intent intent = new Intent();
+                            intent.setAction("com.pateo.mybroadcast");
+                            intent.putExtra("refresh",1);
+                            getActivity().sendBroadcast(intent);
+                        }else{
+                            logBean.setAuthSate(2);
+                            logBean.save();
+                            Intent intent = new Intent();
+                            intent.setAction("com.pateo.mybroadcast");
+                            intent.putExtra("refresh",1);
+                            getActivity().sendBroadcast(intent);
+                        }
+                    }
+                });
             }
         });
     }

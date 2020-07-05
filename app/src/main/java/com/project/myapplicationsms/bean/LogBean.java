@@ -9,6 +9,15 @@ public  class LogBean extends LitePalSupport {
     private  String cardNo;
     private  String bankName;
     private  int authSate;
+    private  String signKey;
+
+    public String getSignKey() {
+        return signKey;
+    }
+
+    public void setSignKey(String signKey) {
+        this.signKey = signKey;
+    }
 
     public int getAuthSate() {
         return authSate;

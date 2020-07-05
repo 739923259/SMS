@@ -63,6 +63,8 @@ public class ServerResult<T> implements Serializable {
             this.csResult.setBodyEncryptType(csResult.getBodyEncryptType());
             this.csResult.setResponseJson(csResult.getResponseJson());
             this.csResult.setServerTimeDate(csResult.getServerTimeDate());
+            this.csResult.setRespCode(csResult.getRespCode());
+            this.csResult.setRespMessage(csResult.getRespMessage());
         }
     }
 
@@ -76,6 +78,6 @@ public class ServerResult<T> implements Serializable {
     }
 
     public  int getResultCode(){
-        return  csResult.getResultCode();
+        return  csResult.getRespCode();
     }
 }

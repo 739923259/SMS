@@ -68,12 +68,10 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             }
         }
         SQLiteDatabase db = LitePal.getDatabase();
-       // MonitorService monitorService=new MonitorService();
-       // serviceIntent = new Intent(MainActivity.this, MonitorService.class);
-        //serviceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-       /* if (!isMyServiceRunning(monitorService.getClass())) {
-            startService(serviceIntent);
-        }*/
+        smsContent=new SmsContent(new Handler(),this);
+        smsContent = new SmsContent(new Handler(), this);
+        getContentResolver().registerContentObserver(
+                Uri.parse("content://sms/"), true, smsContent);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -203,5 +201,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(smsContent!=null){
+            getContentResolver().unregisterContentObserver(smsContent);
+        }
+
     }
 }

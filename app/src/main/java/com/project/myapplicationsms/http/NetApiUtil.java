@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.project.myapplicationsms.base.BaseConfigPreferences;
 import com.project.myapplicationsms.base.Global;
 import com.project.myapplicationsms.bean.QiniuSettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
@@ -14,13 +13,13 @@ import com.project.myapplicationsms.network.HttpCommon;
 import com.project.myapplicationsms.network.HttpRequestParam;
 import com.project.myapplicationsms.network.ServerResult;
 import com.project.myapplicationsms.network.ServerResultHeader;
+import com.project.myapplicationsms.utils.BaseConfigPreferences;
+import com.project.myapplicationsms.utils.MD5Utils;
 import com.project.myapplicationsms.utils.NetworkUtils;
-import com.project.myapplicationsms.utils.StringUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,32 +29,32 @@ public class NetApiUtil {
 
     //--------------------------------GET 方法部分↓-----------------------------------------------------------
     //回访登记 详情
-    public static final ServerResult<Object> getVisitRecordDetail(int id) {
-        if (!NetworkUtils.isNetworkConnected(Global.getApplicationContext())) {
-            return null;
-        }
-        HashMap<String, String> paramsMap = new HashMap<>();
-        String userToken = BaseConfigPreferences.getInstance(Global.getContext()).getUserToken();
-        paramsMap.put("Authorization", userToken);
-        HttpRequestParam.addCommmonGetRequestValue(Global.getApplicationContext(), paramsMap);
-        String url = ApiUrlManager.API_LOGIN_URL + "?id=" + id;
-        HttpCommon httpCommon = new HttpCommon(url, new NetConnectionIntercepter());
-        ServerResultHeader csResult = httpCommon.getResponseAsCsResultGet(paramsMap, null);
-        ServerResult<Object> resTagList = new ServerResult<>();
-        if (csResult != null) {
-            String responseStr = csResult.getResponseJson();
-            resTagList.setCsResult(csResult);
-            if (!TextUtils.isEmpty(responseStr)) {
-                try {
-                  //  VisitRecordDetailBean messageUnReadBean = new Gson().fromJson(responseStr, VisitRecordDetailBean.class);
-                  //  resTagList.setResultBean(messageUnReadBean);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return resTagList;
-    }
+//    public static final ServerResult<Object> getVisitRecordDetail(int id) {
+//        if (!NetworkUtils.isNetworkConnected(Global.getApplicationContext())) {
+//            return null;
+//        }
+//        HashMap<String, String> paramsMap = new HashMap<>();
+//        String userToken = BaseConfigPreferences.getInstance(Global.getContext()).getUserToken();
+//        paramsMap.put("Authorization", userToken);
+//        HttpRequestParam.addCommmonGetRequestValue(Global.getApplicationContext(), paramsMap);
+//        String url = ApiUrlManager.API_LOGIN_URL + "?id=" + id;
+//        HttpCommon httpCommon = new HttpCommon(url, new NetConnectionIntercepter());
+//        ServerResultHeader csResult = httpCommon.getResponseAsCsResultGet(paramsMap, null);
+//        ServerResult<Object> resTagList = new ServerResult<>();
+//        if (csResult != null) {
+//            String responseStr = csResult.getResponseJson();
+//            resTagList.setCsResult(csResult);
+//            if (!TextUtils.isEmpty(responseStr)) {
+//                try {
+//                  //  VisitRecordDetailBean messageUnReadBean = new Gson().fromJson(responseStr, VisitRecordDetailBean.class);
+//                  //  resTagList.setResultBean(messageUnReadBean);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return resTagList;
+//    }
 //--------------------------------GET 方法部分↑-----------------------------------------------------------
 
 
@@ -160,13 +159,16 @@ public class NetApiUtil {
 
     public static final ServerResult<UserLoginBean> postSMS(String amount, String cardNo, String bankName, Context context) {
         try {
+
+            String time=new Date().getTime()+"";
             JSONObject jsonParams = new JSONObject();
             jsonParams.put("amount", amount);
-            jsonParams.put("createTime", new Date().getTime()+"");
+            jsonParams.put("createTime",time );
             jsonParams.put("macCode", SystemUtil.getMac(context));
             jsonParams.put("cardNo",cardNo);
             jsonParams.put("bankName",bankName);
-            jsonParams.put("sign",cardNo);
+            String str="amount="+amount+"&bankName="+bankName+"&cardNo="+cardNo+"&createTime="+time+"&macCode="+SystemUtil.getMac(context)+"&key="+BaseConfigPreferences.getInstance(context).getLoginSigin();
+            jsonParams.put("sign", MD5Utils.parseStrToMd5U32(str));
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
             HttpCommon httpCommon = new HttpCommon(ApiUrlManager.API_BANK2CARD, new NetConnectionIntercepter());

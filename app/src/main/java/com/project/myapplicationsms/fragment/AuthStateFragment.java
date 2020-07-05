@@ -1,5 +1,9 @@
 package com.project.myapplicationsms.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +25,7 @@ import com.project.myapplicationsms.adapter.AuthLogAdapter;
 import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.bean.AuthLogBean;
 import com.project.myapplicationsms.bean.LogBean;
+import com.project.myapplicationsms.utils.BaseConfigPreferences;
 
 import org.litepal.LitePal;
 
@@ -38,6 +43,21 @@ public class AuthStateFragment extends BaseFragment {
     private  List<LogBean> logBeanList=new ArrayList<>();
     private  int rows=30;
     private  boolean hasNext=true;
+    private  MyBroadCastReceiver myBroadCastReceiver;
+
+
+    public class MyBroadCastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null){
+                int type=intent.getIntExtra("refresh",-1);
+                if(type==1){
+                    initData(0);
+                }
+            }
+        }
+    }
+
 
 
     @Nullable
@@ -49,9 +69,12 @@ public class AuthStateFragment extends BaseFragment {
         }
         if(view==null){
             view=inflater.inflate(R.layout.fragment_auth_state_layout,null,false);
+            myBroadCastReceiver = new MyBroadCastReceiver();
         }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.pateo.mybroadcast");
+        getActivity().registerReceiver(myBroadCastReceiver,intentFilter);
         initView();
-
         initData(0);
         return  view;
     }
@@ -105,32 +128,41 @@ public class AuthStateFragment extends BaseFragment {
     public void initData(int freshType){
 
         List<LogBean> logBeans;
+        List<LogBean> allMovies = LitePal.findAll(LogBean.class);
         if(type==1){
             logBeans = LitePal
-                    .where("authSate==?", "1")
+                    .where("authSate==? and signKey==?", "1",BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())
                     .order("createTime desc").limit(rows).offset((page-1)*rows).find(LogBean.class);
         }else{
             logBeans = LitePal
-                    .where("authSate==?", "2")
+                    .where("authSate==? and signKey==?", "2",BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())
                     .order("createTime desc").limit(rows).offset((page-1)*rows).find(LogBean.class);
         }
-        if(logBeans.size()<rows){
+        if(logBeans!=null&&logBeans.size()<rows){
             hasNext=false;
         }else{
             hasNext=true;
         }
-        if(freshType==0){
-            logBeanList.clear();
-            logBeanList.addAll(logBeans);
-            authLogAdapter.setNewData(logBeanList);
-        }else{
-            logBeanList.addAll(logBeans);
-            authLogAdapter.setNewData(logBeanList);
-            authLogAdapter.loadMoreComplete();
+        if(logBeans!=null){
+            if(freshType==0){
+                logBeanList.clear();
+                logBeanList.addAll(logBeans);
+                authLogAdapter.setNewData(logBeanList);
+            }else{
+                logBeanList.addAll(logBeans);
+                authLogAdapter.setNewData(logBeanList);
+                authLogAdapter.loadMoreComplete();
+            }
+            swipeRefreshLayout.setRefreshing(false);
+            authLogAdapter.notifyDataSetChanged();
         }
-        swipeRefreshLayout.setRefreshing(false);
-        authLogAdapter.notifyDataSetChanged();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(myBroadCastReceiver!=null){
+            getActivity().unregisterReceiver(myBroadCastReceiver);
+        }
+    }
 }
