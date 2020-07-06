@@ -95,7 +95,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="上线"
+        android:text="测试发送短信"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:textColor="#fff"

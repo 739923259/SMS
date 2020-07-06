@@ -86,7 +86,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         tvSubmit1=view.findViewById(R.id.tv_submit1);
         tvSubmit.setOnClickListener(this);
         tvSubmit1.setOnClickListener(this);
-        LitePal.deleteAll(LogBean.class);
+       // LitePal.deleteAll(LogBean.class);
        /* for(int i=0;i<50;i++){
             LogBean logBean=new LogBean();
             logBean.setAmount("100");
