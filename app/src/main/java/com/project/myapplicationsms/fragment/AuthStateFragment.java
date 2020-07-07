@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +127,9 @@ public class AuthStateFragment extends BaseFragment {
 
 
     public void initData(int freshType){
+        if(TextUtils.isEmpty(BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())){
+            return;
+        }
 
         List<LogBean> logBeans;
         List<LogBean> allMovies = LitePal.findAll(LogBean.class);
