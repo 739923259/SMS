@@ -61,6 +61,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
 
     private void stopTimer(){
         flag = false;
+        mHandler.removeCallbacks(runnable);
     }
 
 
@@ -104,6 +105,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     }
 
     private void setTimer(){
+        mHandler.removeCallbacks(runnable);
         mHandler.postDelayed(runnable, 5000*10);
     }
 
@@ -146,7 +148,9 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             }
                             if(code==5003){
                                 MessageUtils.show(getActivity(),msg);
+                                tvSubmit.setText("已上线");
                             }else{
+                                tvSubmit.setText("上线");
                                 MessageUtils.show(getActivity(),msg+"code:"+code);
                             }
                         }
