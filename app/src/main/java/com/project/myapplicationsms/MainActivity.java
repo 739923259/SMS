@@ -4,12 +4,15 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.project.myapplicationsms.observe.SmsContent;
+import com.project.myapplicationsms.utils.StringUtils;
+import com.project.myapplicationsms.utils.SystemUtil;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,36 +52,21 @@ public class MainActivity extends AppCompatActivity {
        // Pattern pattern = Pattern.compile("【(.*?)】|\\[(.*?)\\]");//银行名称
         //Pattern pattern = Pattern.compile("[\\*0-9\\.]+");//金额
        // String input="【邮储银行】20年06月12日16:15您尾号019账户提现金额250.46元，余额2458.07元。";
-        String input="【中信银行】您尾号5652的中信卡于08月20日11:20，支付宝存入人民币999.80元，当前余额为人民币1001.47元。";
-
-        int beginIndex=input.indexOf("尾号")+2;
-        int endIndex=input.indexOf("尾号")+6;
-        String zhanghao=null;
-        if(beginIndex>=0){
-            zhanghao =input.substring(beginIndex,endIndex);
-        }else{
-            beginIndex=  input.indexOf("账户")+2;
-             endIndex=input.indexOf("尾号")+6;
-            zhanghao =input.substring(beginIndex,endIndex);
-        }
-
-        String reg = "[\u4e00-\u9fa5]";
-        Pattern pat = Pattern.compile(reg);
-        Matcher m=pat.matcher(zhanghao);
-       zhanghao=m.replaceAll("");
-       Log.i("===1",zhanghao);
+        ArrayList list=new ArrayList();
+        list.add("【中信银行】您尾号5652的中信卡于08月20日11:20，支付宝存入人民币999.80元，当前余额为人民币1001.47元。");
+        list.add("尾号4033账户03:31存入299.82元，余额1500.56元，摘要:辛毅支付宝转账 辛毅支付宝转账。[光大银行]");
+        list.add("【邮储银行】20年08月15日03:02您尾号421账户提现金额499.83元，余额500.22元。");
+        list.add("您尾号*3455的卡于08月17日23:59在支付宝转入299.88元，交易后余额为300.81元。【交通银行】");
+        list.add("您存款账户7607于8月11日3:41付款业务转入人民币299.94元，活期余额人民币300.52元。【平安银行】");
+        list.add("您尾号4912的储蓄卡8月20日11时48分支付宝提现收入人民币299.84元,活期余额1105.24元。[建设银行]");
+        list.add("您的账户0163于08月20日12:14收入人民币1,600.00元，余额52,001.86元。【华夏银行】");
+        list.add("【中国农业银行】方孜行于08月17日18:12向您尾号2379账户完成转存交易人民币699.97，余额700.96。");
+        list.add("您尾号5960卡8月12日13:16网上银行收入(银联入账)299.92元，余额317.12元。【工商银行】");
 
 
-
-        Pattern pattern = Pattern.compile("[\\*0-9\\.]+");
-       // Matcher matcher = pattern.matcher("您尾号7293的储蓄卡6月12日7时49分支付宝提现收入人民币500.09元,活期余额611.33元。[建设银行]");
-        Matcher matcher = pattern.matcher(input);
-        while (matcher.find()) {
-            String group = matcher.group().replace("【","").replace("】","").replace("[","").replace("]","");
-           Log.i("===",group);
-
-        }
-
+//       for(int i=0;i<list.size();i++){
+//           Log.i("===", StringUtils.parseInMoney(list.get(i).toString()));
+//       }
     }
 
     @Override

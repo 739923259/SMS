@@ -24,6 +24,7 @@ public  class StringUtils {
 
     public  static  String parseInMoney(String input){
         try {
+            input=input.replace(",","");
             Pattern pattern = Pattern.compile("[\\*0-9\\.]+");
             Matcher matcher = pattern.matcher(input);
             List list=new ArrayList();
@@ -41,7 +42,16 @@ public  class StringUtils {
 
     public  static  String parseBankLastFour(String input){
             try {
-                String zhanghao=input.substring(input.indexOf("尾号")+2,input.indexOf("尾号")+6);
+                int beginIndex=input.indexOf("尾号");
+                int endIndex=input.indexOf("尾号");
+                String zhanghao=null;
+                if(beginIndex>=0){
+                    zhanghao =input.substring(beginIndex+2,endIndex+7);
+                }else{
+                    beginIndex=  input.indexOf("账户");
+                    endIndex=input.indexOf("账户");
+                    zhanghao =input.substring(beginIndex+2,endIndex+7);
+                }
                 Pattern pattern = Pattern.compile("[\\*0-9\\.]+");
                 Matcher matcher = pattern.matcher(input);
                 String reg = "[\u4e00-\u9fa5]";
