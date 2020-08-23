@@ -49,13 +49,24 @@ public class MainActivity extends AppCompatActivity {
        // Pattern pattern = Pattern.compile("【(.*?)】|\\[(.*?)\\]");//银行名称
         //Pattern pattern = Pattern.compile("[\\*0-9\\.]+");//金额
        // String input="【邮储银行】20年06月12日16:15您尾号019账户提现金额250.46元，余额2458.07元。";
-        String input="尾号6965账户14:46存入300.64元，余额2127.53元，摘要:王祺禛支付宝转账 王祺禛支付宝转账。[光大银行]";
-        String zhanghao=input.substring(input.indexOf("尾号")+2,input.indexOf("尾号")+6);
+        String input="【中信银行】您尾号5652的中信卡于08月20日11:20，支付宝存入人民币999.80元，当前余额为人民币1001.47元。";
+
+        int beginIndex=input.indexOf("尾号")+2;
+        int endIndex=input.indexOf("尾号")+6;
+        String zhanghao=null;
+        if(beginIndex>=0){
+            zhanghao =input.substring(beginIndex,endIndex);
+        }else{
+            beginIndex=  input.indexOf("账户")+2;
+             endIndex=input.indexOf("尾号")+6;
+            zhanghao =input.substring(beginIndex,endIndex);
+        }
+
         String reg = "[\u4e00-\u9fa5]";
         Pattern pat = Pattern.compile(reg);
         Matcher m=pat.matcher(zhanghao);
        zhanghao=m.replaceAll("");
-       Log.i("===",zhanghao);
+       Log.i("===1",zhanghao);
 
 
 
