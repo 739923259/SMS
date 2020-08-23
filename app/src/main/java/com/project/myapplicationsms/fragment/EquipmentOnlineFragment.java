@@ -24,6 +24,7 @@ import com.project.myapplicationsms.bean.LogBean;
 import com.project.myapplicationsms.bean.QiniuSettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
+import com.project.myapplicationsms.network.ApiUrlManager;
 import com.project.myapplicationsms.network.ServerResult;
 import com.project.myapplicationsms.utils.BaseConfigPreferences;
 import com.project.myapplicationsms.utils.MessageUtils;
@@ -121,6 +122,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
             MessageUtils.show(getActivity(),"请输入设备key");
             return;
         }
+        ApiUrlManager.BaseUrl=etUrl.getText().toString().trim();
         ThreadUtil.executeMore(new Runnable() {
             @Override
             public void run() {

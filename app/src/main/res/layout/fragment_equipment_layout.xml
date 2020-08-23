@@ -90,6 +90,7 @@
         />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_submit1"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"

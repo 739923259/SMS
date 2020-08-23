@@ -40,6 +40,8 @@ public class BaseConfigPreferences {
         baseSP.edit().putString(LOGIN_SIGN, count).commit();
     }
 
+
+
     public String getLoginSigin() {
         return baseSP.getString(LOGIN_SIGN, (String) null);
     }

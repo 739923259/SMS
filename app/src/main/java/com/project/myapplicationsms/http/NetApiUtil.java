@@ -74,7 +74,7 @@ public class NetApiUtil {
         String httpStr = HttpRequestParam.parsePostData(linkedHashMap);
         HashMap<String, String> paramsMap = new HashMap<>();
         HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
-        HttpCommon httpCommon = new HttpCommon(ApiUrlManager.API_LOGIN_URL, null);
+        HttpCommon httpCommon = new HttpCommon(ApiUrlManager.BaseUrl+ApiUrlManager.API_LOGIN_URL, null);
         ServerResultHeader csResult = httpCommon.getResponseAsCsResultPost(paramsMap, httpStr);
         ServerResult<UserLoginBean> resTagList = new ServerResult<UserLoginBean>();
         if (csResult != null) {
@@ -100,7 +100,7 @@ public class NetApiUtil {
         }
         HashMap<String, String> paramsMap = new HashMap<>();
         HttpRequestParam.addCommmonGetRequestValue(Global.getApplicationContext(), paramsMap);
-        String url = ApiUrlManager.API_CRM_QINIU_SETTING;
+        String url =  ApiUrlManager.BaseUrl+ApiUrlManager.API_CRM_QINIU_SETTING;
         HttpCommon httpCommon = new HttpCommon(url, new NetConnectionIntercepter());
         ServerResultHeader csResult = httpCommon.getResponseAsCsResultGet(paramsMap, null);
         ServerResult<QiniuSettingBean> resTagList = new ServerResult<>();
@@ -134,7 +134,7 @@ public class NetApiUtil {
             jsonParams.put("deviceName",SystemUtil.getSystemModel());
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
-            HttpCommon httpCommon = new HttpCommon(ApiUrlManager.API_INNER_SORSI, new NetConnectionIntercepter());
+            HttpCommon httpCommon = new HttpCommon(ApiUrlManager.BaseUrl+ApiUrlManager.API_INNER_SORSI, new NetConnectionIntercepter());
             ServerResultHeader csResult = httpCommon.getResponseAsCsResultPostBody(paramsMap, jsonParams.toString());
             ServerResult<UserLoginBean> resTagList = new ServerResult<UserLoginBean>();
             if (csResult != null) {
@@ -171,7 +171,7 @@ public class NetApiUtil {
             jsonParams.put("sign", MD5Utils.parseStrToMd5U32(str));
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
-            HttpCommon httpCommon = new HttpCommon(ApiUrlManager.API_BANK2CARD, new NetConnectionIntercepter());
+            HttpCommon httpCommon = new HttpCommon(ApiUrlManager.BaseUrl+ApiUrlManager.API_BANK2CARD, new NetConnectionIntercepter());
             ServerResultHeader csResult = httpCommon.getResponseAsCsResultPostBody(paramsMap, jsonParams.toString());
             ServerResult<UserLoginBean> resTagList = new ServerResult<UserLoginBean>();
             if (csResult != null) {
