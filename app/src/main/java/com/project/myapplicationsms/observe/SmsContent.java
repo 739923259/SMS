@@ -49,7 +49,7 @@ public  class SmsContent extends ContentObserver {
         } else {
             uri = uri;
         }
-        Log.i("====",uri.toString());
+
         if (uri.toString().contains("content://sms/raw") || uri.toString().equals("content://sms")) {
             return;
         }
@@ -62,7 +62,7 @@ public  class SmsContent extends ContentObserver {
                 int id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String body = cursor.getString(cursor.getColumnIndex("body"));
                 //String input="您尾号7293的储蓄卡6月12日7时49分支付宝提现收入人民币500.09元,活期余额611.33元。[建设银行]";
-
+                Log.i("====",uri.toString());
                 pasreSMS(body);
                 cursor.close();
 
