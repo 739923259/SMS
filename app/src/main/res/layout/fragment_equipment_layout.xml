@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="#fff"
     android:layout_height="match_parent">
     <include layout="@layout/common_titlebar"></include>
     <LinearLayout
+        android:layout_marginTop="15dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:gravity="center_vertical"
@@ -25,9 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:paddingLeft="5dp"
+                android:minHeight="40dp"
                 android:id="@+id/et_url"
                 android:textSize="14sp"
-                android:background="@null"
+                android:background="@drawable/et_bg"
                 android:textColor="#666"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -60,9 +64,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:paddingLeft="5dp"
+                android:minHeight="40dp"
                 android:id="@+id/et_sign"
                 android:textSize="14sp"
-                android:background="@null"
+                android:background="@drawable/et_bg"
                 android:textColor="#666"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

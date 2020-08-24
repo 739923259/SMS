@@ -46,6 +46,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     private  EditText etSign;
     private  TextView tvSubmit;
     private  TextView tvSubmit1;
+    private  TextView tvEdit;
     private static boolean flag = true;
     private Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
@@ -86,8 +87,11 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         etSign=view.findViewById(R.id.et_sign);
         tvSubmit=view.findViewById(R.id.tv_submit);
         tvSubmit1=view.findViewById(R.id.tv_submit1);
+        tvEdit=view.findViewById(R.id.tv_edit);
         tvSubmit.setOnClickListener(this);
         tvSubmit1.setOnClickListener(this);
+        tvEdit.setOnClickListener(this);
+        tvEdit.setVisibility(View.VISIBLE);
        // LitePal.deleteAll(LogBean.class);
        /* for(int i=0;i<50;i++){
             LogBean logBean=new LogBean();
@@ -134,6 +138,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             int code=visitRecordDetail.getResultCode();
                             String msg="";
                             if(code==200){
+                                setCanEdit(false);
                                 msg="认证成功";
                                 BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
                                 setTimer();
@@ -144,6 +149,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             }else if(code==5002){
                                 msg="认证失败";
                             }else if(code==5003){
+                                setCanEdit(false);
                                 msg="认证成功";
                                 BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
                                 setTimer();
@@ -169,7 +175,21 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         }else if(v.getId()==R.id.tv_submit1){
             String input="您尾号7293的储蓄卡6月12日7时49分支付宝提现收入人民币500.09元,活期余额611.33元。[建设银行]";
             pasreSMS(input);
+        }else if(v.getId()==R.id.tv_edit){
+            if(tvEdit.getText().equals("编辑")){
+                tvEdit.setText("完成");
+                setCanEdit(true);
+            }else{
+                tvEdit.setText("编辑");
+                setCanEdit(false);
+            }
         }
+    }
+
+    public  void setCanEdit(boolean isEdit){
+        etUrl.setEnabled(isEdit);
+        etSign.setEnabled(isEdit);
+
     }
 
     public void pasreSMS(String body){
