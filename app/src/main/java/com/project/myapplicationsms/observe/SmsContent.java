@@ -34,30 +34,35 @@ public  class SmsContent extends ContentObserver {
         super(handler);
         this.mActivity = activity;
     }
-    @Override
-    public boolean deliverSelfNotifications() {
-        return true;
-    }
 
-    @Override
-    public void onChange(boolean selfChange) {
-        onChange(selfChange, null);
-    }
+
+
+    // 只要 “content://sms” 里面的数据发生了变化就会调用该方法
+    // selfChange = false, Uri = content://sms/2750 收到短信后调用的
+    // selfChange = false, Uri = content://sms/inbox 打开了短信 App 后调用的
 
     @Override
     public void onChange(boolean selfChange, Uri uri) {
+
         if (uri == null) {
             uri = Uri.parse("content://sms/inbox");
+        } else {
+            uri = uri;
         }
-        if (uri.toString().equals("content://sms/raw")) {
+        Log.i("====",uri.toString());
+        if (uri.toString().contains("content://sms/raw") || uri.toString().equals("content://sms")) {
             return;
         }
-        cursor = this.mActivity.getContentResolver().query(uri, null, null, null, null);
+        if (uri.toString().equals("content://sms/inbox")) {//打开时调用
+            return;
+        }
+        cursor = this.mActivity.getContentResolver().query(uri, null, null, null, "date desc");
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 int id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String body = cursor.getString(cursor.getColumnIndex("body"));
                 //String input="您尾号7293的储蓄卡6月12日7时49分支付宝提现收入人民币500.09元,活期余额611.33元。[建设银行]";
+
                 pasreSMS(body);
                 cursor.close();
 
