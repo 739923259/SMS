@@ -7,6 +7,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,12 +29,22 @@ public  class SmsContent extends ContentObserver {
     private static final String MARKER = "YOUR_KEYWORD";
     private Cursor cursor = null;
     private Context mActivity;
-
+    private static int initialPos;
+    private static final Uri uriSMS = Uri.parse("content://sms/inbox");
 
     public SmsContent(Handler handler, Context activity) {
         super(handler);
         this.mActivity = activity;
+        initialPos = getLastMsgId();
     }
+
+    public int getLastMsgId() {
+        Cursor cur = mActivity.getContentResolver().query(uriSMS, null, null, null, null);
+        cur.moveToFirst();
+        int lastMsgId = cur.getInt(cur.getColumnIndex("_id"));
+        return lastMsgId;
+    }
+
 
 
 
@@ -44,6 +55,8 @@ public  class SmsContent extends ContentObserver {
     @Override
     public void onChange(boolean selfChange, Uri uri) {
 
+
+
         if (uri == null) {
             uri = Uri.parse("content://sms/inbox");
         } else {
@@ -53,32 +66,35 @@ public  class SmsContent extends ContentObserver {
         if (uri.toString().contains("content://sms/raw") || uri.toString().equals("content://sms")) {
             return;
         }
-        if (uri.toString().equals("content://sms/inbox")) {//打开时调用
-            return;
-        }
+
         cursor = this.mActivity.getContentResolver().query(uri, null, null, null, "date desc");
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                String body = cursor.getString(cursor.getColumnIndex("body"));
-                //String input="您尾号7293的储蓄卡6月12日7时49分支付宝提现收入人民币500.09元,活期余额611.33元。[建设银行]";
-                Log.i("====",uri.toString());
-                pasreSMS(body);
-                cursor.close();
-
+                if (initialPos != getLastMsgId()) {
+                    int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                    String body = cursor.getString(cursor.getColumnIndex("body"));
+                    Log.i("===",uri.toString());
+                    initialPos = getLastMsgId();
+                    pasreSMS(body,uri);
+                    cursor.close();
+                }
             }
         }
     }
 
 
-    public void pasreSMS(String body){
+    public void pasreSMS(String body,Uri uri){
         String amount= StringUtils.parseInMoney(body);
         String cardNo=StringUtils.parseBankLastFour(body);
         String bankName=StringUtils.parseBankName(body);
         String createTime=new Date().getTime()+"";
-        String macCode= SystemUtil.getMac(this.mActivity);
+        String macCode= SystemUtil.recupAdresseMAC(this.mActivity);
         if(SystemUtil.isEmulator(this.mActivity)){
             return ;
+        }
+
+        if(TextUtils.isEmpty(amount)||TextUtils.isEmpty(cardNo)||TextUtils.isEmpty(bankName)||body.indexOf("银行")<0){
+            return;
         }
         Activity activity= (Activity) this.mActivity;
         ThreadUtil.executeMore(new Runnable() {
@@ -95,6 +111,7 @@ public  class SmsContent extends ContentObserver {
                         logBean.setBankName(bankName);
                         logBean.setCardNo(cardNo);
                         logBean.setSignKey(BaseConfigPreferences.getInstance(activity).getLoginSigin());
+                       // logBean.setUrl(uri.toString());
                         if(visitRecordDetail!=null){
                             int code=visitRecordDetail.getResultCode();
                             String msg="";

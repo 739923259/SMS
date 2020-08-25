@@ -44,7 +44,7 @@ public class EquipmentInfoFragment extends BaseFragment {
         tvMacCode = view.findViewById(R.id.tv_mac);
         tvIp = view.findViewById(R.id.tv_ip);
         String name = SystemUtil.getSystemModel();
-        String mac = SystemUtil.getMac(getActivity());
+        String mac = SystemUtil.recupAdresseMAC(getActivity());
         String ip = SystemUtil.getIpAddress(getActivity());
         if (!TextUtils.isDigitsOnly(name)) {
             tvName.setText(name);

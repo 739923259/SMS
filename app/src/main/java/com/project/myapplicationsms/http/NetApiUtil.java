@@ -131,7 +131,7 @@ public class NetApiUtil {
             JSONObject jsonParams = new JSONObject();
             jsonParams.put("url", url);
             jsonParams.put("signKey", signKey);
-            jsonParams.put("macCode", SystemUtil.getMac(context));
+            jsonParams.put("macCode", SystemUtil.recupAdresseMAC(context));
             jsonParams.put("deviceName",SystemUtil.getSystemModel());
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
@@ -165,10 +165,10 @@ public class NetApiUtil {
             JSONObject jsonParams = new JSONObject();
             jsonParams.put("amount", amount);
             jsonParams.put("createTime",time );
-            jsonParams.put("macCode", SystemUtil.getMac(context));
+            jsonParams.put("macCode", SystemUtil.recupAdresseMAC(context));
             jsonParams.put("cardNo",cardNo);
             jsonParams.put("bankName",bankName);
-            String str="amount="+amount+"&bankName="+bankName+"&cardNo="+cardNo+"&createTime="+time+"&macCode="+SystemUtil.getMac(context)+"&key="+BaseConfigPreferences.getInstance(context).getLoginSigin();
+            String str="amount="+amount+"&bankName="+bankName+"&cardNo="+cardNo+"&createTime="+time+"&macCode="+SystemUtil.recupAdresseMAC(context)+"&key="+BaseConfigPreferences.getInstance(context).getLoginSigin();
             jsonParams.put("sign", MD5Utils.parseStrToMd5U32(str));
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);

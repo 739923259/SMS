@@ -17,7 +17,7 @@ public class WelcomeActivity extends BaseActivity {
             return;
         }
         setContentView(R.layout.activity_welcome);
-        requestPermissions(WelcomeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new RequestPermissionCallBack() {
+        requestPermissions(WelcomeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_SMS,Manifest.permission.RECEIVE_SMS}, new RequestPermissionCallBack() {
             @Override
             public void granted() {
                 startActivity(new Intent(WelcomeActivity.this, MainActivity.class));

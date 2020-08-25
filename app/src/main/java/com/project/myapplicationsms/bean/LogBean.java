@@ -12,6 +12,15 @@ public  class LogBean extends LitePalSupport implements Serializable {
     private  String bankName;
     private  int authSate;
     private  String signKey;
+    private  String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getSignKey() {
         return signKey;

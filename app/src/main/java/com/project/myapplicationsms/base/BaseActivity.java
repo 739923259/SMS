@@ -127,11 +127,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         //如果所有权限都已授权，则直接返回授权成功,只要有一项未授权，则发起权限请求
         boolean isAllGranted = true;
         for (String permission : permissions) {
-            LogUtils.e("=====", "======permission:" + permission);
+           // LogUtils.e("=====", "======permission:" + permission);
             if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
                 isAllGranted = false;
                 if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
-                    LogUtils.e("=====", "======shouldShowRequestPermissionRationale:" + permission);
+                 //   LogUtils.e("=====", "======shouldShowRequestPermissionRationale:" + permission);
                     new AlertDialog.Builder(context).setTitle("权限申请")//设置对话框标题
                             .setMessage("【用户权限没有申请】" +
                                     "您好，需要如下权限：" + permissionNames +
