@@ -69,7 +69,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
         SQLiteDatabase db = LitePal.getDatabase();
         smsContent=new SmsContent(new Handler(),this);
-        smsContent = new SmsContent(new Handler(), this);
         getContentResolver().registerContentObserver(
                 Uri.parse("content://sms/"), true, smsContent);
     }

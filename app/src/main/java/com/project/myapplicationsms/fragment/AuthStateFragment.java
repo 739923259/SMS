@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,9 +131,12 @@ public class AuthStateFragment extends BaseFragment {
         if(TextUtils.isEmpty(BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())){
             return;
         }
-
+       // Log.i("=====","XXXX");
         List<LogBean> logBeans;
         List<LogBean> allMovies = LitePal.findAll(LogBean.class);
+//        for(int i=0;i<allMovies.size();i++){
+//            Log.i("====",allMovies.get(i).toString());
+//        }
         if(type==1){
             logBeans = LitePal
                     .where("authSate==? and signKey==?", "1",BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())
@@ -142,6 +146,7 @@ public class AuthStateFragment extends BaseFragment {
                     .where("authSate==? and signKey==?", "2",BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())
                     .order("createTime desc").limit(rows).offset((page-1)*rows).find(LogBean.class);
         }
+        Log.i("====",logBeans.size()+"");
         if(logBeans!=null&&logBeans.size()<rows){
             hasNext=false;
         }else{

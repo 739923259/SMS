@@ -30,6 +30,7 @@ public class BaseConfigPreferences {
 
     //------------------------------------------------------
     public static final String LOGIN_SIGN = "login_account";
+    public static final String cloud_baseurl = "cloud_baseurl";
 
 
     //------------------------------------------------------
@@ -40,12 +41,18 @@ public class BaseConfigPreferences {
         baseSP.edit().putString(LOGIN_SIGN, count).commit();
     }
 
+    public void setBaseUrl(String url) {
+        baseSP.edit().putString(cloud_baseurl, url).commit();
+    }
+
 
 
     public String getLoginSigin() {
         return baseSP.getString(LOGIN_SIGN, (String) null);
     }
-
+    public String getCloud_baseurl() {
+        return baseSP.getString(cloud_baseurl, (String) null);
+    }
 
 
 }

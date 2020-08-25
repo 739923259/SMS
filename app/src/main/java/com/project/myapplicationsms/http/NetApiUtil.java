@@ -2,6 +2,7 @@ package com.project.myapplicationsms.http;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.project.myapplicationsms.base.Global;
@@ -176,6 +177,7 @@ public class NetApiUtil {
             ServerResult<UserLoginBean> resTagList = new ServerResult<UserLoginBean>();
             if (csResult != null) {
                 String responseStr = csResult.getResponseJson();
+                Log.i("===",responseStr);
                 resTagList.setCsResult(csResult);
                 if (!TextUtils.isEmpty(responseStr)) {
                     try {

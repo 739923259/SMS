@@ -2,7 +2,9 @@ package com.project.myapplicationsms.bean;
 
 import org.litepal.crud.LitePalSupport;
 
-public  class LogBean extends LitePalSupport {
+import java.io.Serializable;
+
+public  class LogBean extends LitePalSupport implements Serializable {
 
     private  String amount;
     private  String createTime;
@@ -57,5 +59,17 @@ public  class LogBean extends LitePalSupport {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    @Override
+    public String toString() {
+        return "LogBean{" +
+                "amount='" + amount + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", cardNo='" + cardNo + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", authSate=" + authSate +
+                ", signKey='" + signKey + '\'' +
+                '}';
     }
 }

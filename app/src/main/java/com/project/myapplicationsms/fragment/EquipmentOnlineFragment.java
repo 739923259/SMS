@@ -92,6 +92,22 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         tvSubmit1.setOnClickListener(this);
         tvEdit.setOnClickListener(this);
         tvEdit.setVisibility(View.VISIBLE);
+       String sigin= BaseConfigPreferences.getInstance(getActivity()).getLoginSigin();
+       String url= BaseConfigPreferences.getInstance(getActivity()).getCloud_baseurl();
+
+       if(!TextUtils.isEmpty(url)){
+           ApiUrlManager.BaseUrl=url;
+           etUrl.setText(url);
+           setCanEdit(false);
+       }
+       if(!TextUtils.isEmpty(sigin)){
+           etSign.setText(sigin);
+           setCanEdit(false);
+       }
+
+       if(!TextUtils.isEmpty(url)&&!TextUtils.isEmpty(sigin)){
+           submitData();
+       }
        // LitePal.deleteAll(LogBean.class);
        /* for(int i=0;i<50;i++){
             LogBean logBean=new LogBean();
@@ -141,6 +157,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 setCanEdit(false);
                                 msg="认证成功";
                                 BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
+                                BaseConfigPreferences.getInstance(getActivity()).setBaseUrl(etUrl.getText().toString());
                                 setTimer();
                             }else if(code==4000){
                                 msg="解密失败";
@@ -151,6 +168,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             }else if(code==5003){
                                 setCanEdit(false);
                                 msg="认证成功";
+                                BaseConfigPreferences.getInstance(getActivity()).setBaseUrl(etUrl.getText().toString());
                                 BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
                                 setTimer();
                             }
