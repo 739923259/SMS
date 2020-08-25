@@ -73,7 +73,7 @@ public  class SmsContent extends ContentObserver {
                 if (initialPos != getLastMsgId()) {
                     int id = cursor.getInt(cursor.getColumnIndex("_id"));
                     String body = cursor.getString(cursor.getColumnIndex("body"));
-                    Log.i("===",uri.toString());
+                    //Log.i("===",uri.toString());
                     initialPos = getLastMsgId();
                     pasreSMS(body,uri);
                     cursor.close();
