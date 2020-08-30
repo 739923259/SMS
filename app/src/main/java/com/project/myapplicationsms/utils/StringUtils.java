@@ -52,6 +52,7 @@ public  class StringUtils {
                     endIndex=input.indexOf("账户");
                     zhanghao =input.substring(beginIndex+2,endIndex+7);
                 }
+                zhanghao=zhanghao.replace("*","");
                 Pattern pattern = Pattern.compile("[\\*0-9\\.]+");
                 Matcher matcher = pattern.matcher(input);
                 String reg = "[\u4e00-\u9fa5]";
@@ -63,6 +64,13 @@ public  class StringUtils {
                 return  null;
             }
 
+    }
+
+    public static boolean isNumber(String string) {
+        if (string == null)
+            return false;
+        Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+        return pattern.matcher(string).matches();
     }
 
 }

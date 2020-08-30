@@ -106,7 +106,7 @@ public class SystemUtil {
     public static String recupAdresseMAC(Context context) {
         final WifiManager wifiMan = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInf = wifiMan.getConnectionInfo();
-        if(wifiInf.getMacAddress().equals(marshmallowMacAddress)){
+        if(wifiInf!=null&&wifiInf.getMacAddress()!=null&&wifiInf.getMacAddress().equals(marshmallowMacAddress)){
             String ret = null;
             try {
                 ret= getAdressMacByInterface();

@@ -197,7 +197,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
-    @Override
+    public  void setSelectPositon(int positon){
+        if(positon==BottomBarView.FOUR){
+            mCurrentFragment=findBusinessFragment;
+            viewPager.setCurrentItem(3,true);
+        }
+    }
+
+   @Override
     protected void onDestroy() {
         super.onDestroy();
         if(smsContent!=null){

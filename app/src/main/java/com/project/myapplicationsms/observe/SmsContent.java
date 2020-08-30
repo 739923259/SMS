@@ -40,9 +40,16 @@ public  class SmsContent extends ContentObserver {
 
     public int getLastMsgId() {
         Cursor cur = mActivity.getContentResolver().query(uriSMS, null, null, null, null);
-        cur.moveToFirst();
-        int lastMsgId = cur.getInt(cur.getColumnIndex("_id"));
-        return lastMsgId;
+        if(cur!=null){
+           boolean ok= cur.moveToFirst();
+           if(ok){
+               int lastMsgId = cur.getInt(cur.getColumnIndex("_id"));
+               return lastMsgId;
+           }
+            return  0;
+        }
+        return  0;
+
     }
 
 
@@ -93,7 +100,11 @@ public  class SmsContent extends ContentObserver {
             return ;
         }
 
-        if(TextUtils.isEmpty(amount)||TextUtils.isEmpty(cardNo)||TextUtils.isEmpty(bankName)||body.indexOf("银行")<0){
+        if(TextUtils.isEmpty(amount)||(TextUtils.isEmpty(cardNo))||TextUtils.isEmpty(bankName)||body.indexOf("银行")<0||body.indexOf("余额")<0){
+            return;
+        }
+
+        if(!StringUtils.isNumber(cardNo)){
             return;
         }
         Activity activity= (Activity) this.mActivity;

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.base.Global;
@@ -26,6 +27,7 @@ import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.network.ApiUrlManager;
 import com.project.myapplicationsms.network.ServerResult;
+import com.project.myapplicationsms.ui.MainActivity;
 import com.project.myapplicationsms.utils.BaseConfigPreferences;
 import com.project.myapplicationsms.utils.MessageUtils;
 import com.project.myapplicationsms.utils.StringUtils;
@@ -159,6 +161,8 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
                                 BaseConfigPreferences.getInstance(getActivity()).setBaseUrl(etUrl.getText().toString());
                                 setTimer();
+                                MainActivity parentActivity = (MainActivity) getActivity();
+                                parentActivity.setSelectPositon(3);
                             }else if(code==4000){
                                 msg="解密失败";
                             }else if(code==5001){
@@ -171,6 +175,8 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 BaseConfigPreferences.getInstance(getActivity()).setBaseUrl(etUrl.getText().toString());
                                 BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
                                 setTimer();
+                                MainActivity parentActivity = (MainActivity) getActivity();
+                                parentActivity.setSelectPositon(3);
                             }
                             if(code==5003){
                                 MessageUtils.show(getActivity(),msg);
