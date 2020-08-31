@@ -59,17 +59,24 @@ public class MainActivity extends AppCompatActivity {
         list.add("您尾号*3455的卡于08月17日23:59在支付宝转入299.88元，交易后余额为300.81元。【交通银行】");
         list.add("您存款账户7607于8月11日3:41付款业务转入人民币299.94元，活期余额人民币300.52元。【平安银行】");
         list.add("您尾号4912的储蓄卡8月20日11时48分支付宝提现收入人民币299.84元,活期余额1105.24元。[建设银行]");
-        list.add("您的账户0163于08月20日12:14收入人民币1,600.00元，余额52,001.86元。【华夏银行】");
+        list.add("您的账户0163于08月20日12:14收入人民币2,001,600.00元，余额52,001.86元。【华夏银行】");
         list.add("【中国农业银行】方孜行于08月17日18:12向您尾号2379账户完成转存交易人民币699.97，余额700.96。");
         list.add("您尾号5960卡8月12日13:16网上银行收入(银联入账)299.92元，余额317.12元。【工商银行】");
         list.add("29日12:53账户*4517*网联付款收入299.95元，余额1100.80元[兴业银行]");
         list.add("【招商银行】手续费6折！即日起至8月31日办理e招贷指定期数可享，单期手续费率低至0.45%，具体以系统实时测评为准，转发无效。戳 cmbt.cn/arRyRI9Kh99 退订回#A");
+        list.add("贵账户*0977于2020年08月30日11:12在海南省分行转入资金0.10元，现余额3.17元，附言：支付宝转账9999.8元【交通银行】");
+        list.add("王飞8月30日11时9分向您尾号8600的储蓄卡支付宝转账9999.98元存入人民币0.10元，活期余额4.28.[建设银行]");
+        list.add("8月22日9时22分向您尾号6777的储蓄卡电子汇入存入人民币20000.00元,活期余额60399.06元。[建设银行]");
 
 
        for(int i=0;i<list.size();i++){
            Log.i("===", StringUtils.parseBankLastFour(list.get(i).toString())+"==="+StringUtils.parseBankName(list.get(i).toString())+"==="+StringUtils.parseInMoney(list.get(i).toString()));
-            Log.i("===",StringUtils.isNumber(StringUtils.parseBankLastFour(list.get(i).toString()))+"");
+           // Log.i("===",StringUtils.isNumber(StringUtils.parseBankLastFour(list.get(i).toString()))+"");
        }
+
+
+
+
     }
 
     @Override
