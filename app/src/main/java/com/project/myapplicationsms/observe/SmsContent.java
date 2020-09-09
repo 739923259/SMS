@@ -82,6 +82,7 @@ public  class SmsContent extends ContentObserver {
                     String body = cursor.getString(cursor.getColumnIndex("body"));
                     String address = cursor.getString(cursor.getColumnIndex("address"));
                     initialPos = getLastMsgId();
+                   // body="您尾号*3455的卡于08月17日23:59在支付宝转入299.88元，交易后余额为300.81元。【交通银行】";
                     pasreSMS(body,uri,  address);
                     cursor.close();
                 }

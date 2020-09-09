@@ -170,7 +170,12 @@ public class NetApiUtil {
             jsonParams.put("bankName",bankName);
             jsonParams.put("smsSender", smsSender);
             jsonParams.put("smsText",  smsText);
-            String str="amount="+amount+"&bankName="+bankName+"&cardNo="+cardNo+"&createTime="+time+"&macCode="+SystemUtil.recupAdresseMAC(context)+"&key="+BaseConfigPreferences.getInstance(context).getLoginSigin();
+            String str="amount="+amount+"&bankName="+bankName
+                    +"&cardNo="+cardNo+"&createTime="+time
+                    +"&smsSender="+smsSender
+                    +"&smsText="+smsText
+                    +"&macCode="+SystemUtil.recupAdresseMAC(context)
+                    +"&key="+BaseConfigPreferences.getInstance(context).getLoginSigin();
             jsonParams.put("sign", MD5Utils.parseStrToMd5U32(str));
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
