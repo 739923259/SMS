@@ -38,6 +38,14 @@ public  class AuthLogAdapter  extends BaseQuickAdapter<LogBean, BaseViewHolder> 
         TextView tvNo=helper.getView(R.id.tv_no);
         TextView tvMoney=helper.getView(R.id.tv_money);
         TextView tvTime=helper.getView(R.id.tv_time);
+        TextView tvSmsAddress=helper.getView(R.id.tv_sms_address);
+
+        if(!TextUtils.isEmpty(item.getAddress())){
+            tvSmsAddress.setText(item.getAddress());
+        }else{
+            tvSmsAddress.setText("");
+        }
+
         if(!TextUtils.isEmpty(item.getBankName())){
             tvName.setText(item.getBankName());
         }else{

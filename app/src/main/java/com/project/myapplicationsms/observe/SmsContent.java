@@ -80,9 +80,9 @@ public  class SmsContent extends ContentObserver {
                 if (initialPos != getLastMsgId()) {
                     int id = cursor.getInt(cursor.getColumnIndex("_id"));
                     String body = cursor.getString(cursor.getColumnIndex("body"));
-                    //Log.i("===",uri.toString());
+                    String address = cursor.getString(cursor.getColumnIndex("address"));
                     initialPos = getLastMsgId();
-                    pasreSMS(body,uri);
+                    pasreSMS(body,uri,  address);
                     cursor.close();
                 }
             }
@@ -90,7 +90,7 @@ public  class SmsContent extends ContentObserver {
     }
 
 
-    public void pasreSMS(String body,Uri uri){
+    public void pasreSMS(String body,Uri uri,String  smsSender ){
         String amount= StringUtils.parseInMoney(body);
         String cardNo=StringUtils.parseBankLastFour(body);
         String bankName=StringUtils.parseBankName(body);
@@ -112,7 +112,7 @@ public  class SmsContent extends ContentObserver {
             @Override
             public void run() {
 
-                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(amount,cardNo,bankName,activity);
+                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(amount,cardNo,bankName,activity,smsSender,body);
                 Global.runInMainThread(new Runnable() {
                     @Override
                     public void run() {
@@ -121,6 +121,7 @@ public  class SmsContent extends ContentObserver {
                         logBean.setCreateTime(createTime);
                         logBean.setBankName(bankName);
                         logBean.setCardNo(cardNo);
+                        logBean.setAddress(smsSender);
                         logBean.setSignKey(BaseConfigPreferences.getInstance(activity).getLoginSigin());
                        // logBean.setUrl(uri.toString());
                         if(visitRecordDetail!=null){

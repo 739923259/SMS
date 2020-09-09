@@ -134,9 +134,6 @@ public class AuthStateFragment extends BaseFragment {
        // Log.i("=====","XXXX");
         List<LogBean> logBeans;
         List<LogBean> allMovies = LitePal.findAll(LogBean.class);
-//        for(int i=0;i<allMovies.size();i++){
-//            Log.i("====",allMovies.get(i).toString());
-//        }
         if(type==1){
             logBeans = LitePal
                     .where("authSate==? and signKey==?", "1",BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())

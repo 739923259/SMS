@@ -158,7 +158,7 @@ public class NetApiUtil {
 
 
 
-    public static final ServerResult<UserLoginBean> postSMS(String amount, String cardNo, String bankName, Context context) {
+    public static final ServerResult<UserLoginBean> postSMS(String amount, String cardNo, String bankName, Context context,String smsSender,String  smsText ) {
         try {
 
             String time=new Date().getTime()+"";
@@ -168,6 +168,8 @@ public class NetApiUtil {
             jsonParams.put("macCode", SystemUtil.recupAdresseMAC(context));
             jsonParams.put("cardNo",cardNo);
             jsonParams.put("bankName",bankName);
+            jsonParams.put("smsSender", smsSender);
+            jsonParams.put("smsText",  smsText);
             String str="amount="+amount+"&bankName="+bankName+"&cardNo="+cardNo+"&createTime="+time+"&macCode="+SystemUtil.recupAdresseMAC(context)+"&key="+BaseConfigPreferences.getInstance(context).getLoginSigin();
             jsonParams.put("sign", MD5Utils.parseStrToMd5U32(str));
             HashMap<String, String> paramsMap = new HashMap<>();

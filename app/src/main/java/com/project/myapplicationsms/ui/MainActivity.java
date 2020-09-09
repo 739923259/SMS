@@ -21,6 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseActivity;
 import com.project.myapplicationsms.base.BaseFragment;
+import com.project.myapplicationsms.bean.LogBean;
 import com.project.myapplicationsms.fragment.EquipmentInfoFragment;
 import com.project.myapplicationsms.fragment.EquipmentOnlineFragment;
 import com.project.myapplicationsms.fragment.MineFragment;
@@ -68,6 +69,15 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             }
         }
         SQLiteDatabase db = LitePal.getDatabase();
+//        LogBean logBean=new LogBean();
+//        logBean.setAddress("10086");
+//        logBean.setAuthSate(1);
+//        logBean.setAmount("65656");
+//        logBean.setCardNo("9999");
+//        logBean.setBankName("中国银行");
+//        logBean.setSignKey("654321");
+//        logBean.setCreateTime("1111111111");
+//        logBean.save();
         smsContent=new SmsContent(new Handler(),this);
         getContentResolver().registerContentObserver(
                 Uri.parse("content://sms/"), true, smsContent);
