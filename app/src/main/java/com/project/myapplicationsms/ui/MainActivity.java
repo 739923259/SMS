@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -33,6 +34,7 @@ import com.project.myapplicationsms.widget.BottomBarView;
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
@@ -48,6 +50,19 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     private Intent serviceIntent;
     SmsContent smsContent;
+    private  static  long task_time=1000*60*60*6;
+    private static boolean flag = true;
+    private Handler mHandler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            //在这里执行定时需要的操作
+            if (flag) {
+                LitePal.deleteAll(LogBean.class,"DATE(createTime) <=  DATE('now', '-1 day', 'localtime')");
+                mHandler.postDelayed(this, task_time);
+            }
+        }
+    };
 
     @Override
     protected void setLayout() {
@@ -69,15 +84,21 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             }
         }
         SQLiteDatabase db = LitePal.getDatabase();
-//        LogBean logBean=new LogBean();
-//        logBean.setAddress("10086");
-//        logBean.setAuthSate(1);
-//        logBean.setAmount("65656");
-//        logBean.setCardNo("9999");
-//        logBean.setBankName("中国银行");
-//        logBean.setSignKey("654321");
-//        logBean.setCreateTime("1111111111");
-//        logBean.save();
+//        for(int i=0;i<2;i++){
+//            LogBean logBean=new LogBean();
+//            logBean.setAmount("500");
+//            logBean.setCreateTime(new Date().getTime()+"");
+//            logBean.setBankName("中国银行");
+//            logBean.setCardNo("6777");
+//            logBean.setAuthSate(1);
+//
+//            logBean.save();
+//        }
+//        List<LogBean> allMovies = LitePal.findAll(LogBean.class);
+//        Log.i("====",allMovies.size()+"size");
+//
+//        Log.i("====",allMovies.size()+"size");
+        setTimer();
         smsContent=new SmsContent(new Handler(),this);
         getContentResolver().registerContentObserver(
                 Uri.parse("content://sms/"), true, smsContent);
@@ -129,6 +150,16 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         viewPager.addOnPageChangeListener(this);
 
 
+    }
+
+    private void setTimer(){
+        mHandler.removeCallbacks(runnable);
+        mHandler.postDelayed(runnable, task_time);
+    }
+
+    private void stopTimer(){
+        flag = false;
+        mHandler.removeCallbacks(runnable);
     }
 
     public void initBottom() {
@@ -220,6 +251,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         if(smsContent!=null){
             getContentResolver().unregisterContentObserver(smsContent);
         }
-
+       stopTimer();
     }
 }

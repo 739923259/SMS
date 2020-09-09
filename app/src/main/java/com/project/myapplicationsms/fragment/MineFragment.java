@@ -18,6 +18,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.tabs.TabLayout;
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseFragment;
+import com.project.myapplicationsms.bean.LogBean;
+
+import org.litepal.LitePal;
 
 public class MineFragment extends BaseFragment {
     private  View view;
