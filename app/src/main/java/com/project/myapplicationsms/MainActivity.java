@@ -34,24 +34,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*String defaultSmsApp = null;
-        String currentPn = getPackageName();//获取当前程序包名
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this);//获取手机当前设置的默认短信应用的包名
-        }
-        if (!defaultSmsApp.equals(currentPn)) {
-            Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-            intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, currentPn);
-            startActivity(intent);
-        }*/
-      /*  smsContent = new SmsContent(new Handler(), this);
-        getContentResolver().registerContentObserver(
-                Uri.parse("content://sms/"), true, smsContent);*/
-        // 银行名称#卡号尾号#金额
-
-       // Pattern pattern = Pattern.compile("【(.*?)】|\\[(.*?)\\]");//银行名称
-        //Pattern pattern = Pattern.compile("[\\*0-9\\.]+");//金额
-       // String input="【邮储银行】20年06月12日16:15您尾号019账户提现金额250.46元，余额2458.07元。";
         ArrayList list=new ArrayList();
         list.add("【中信银行】您尾号5652的中信卡于08月20日11:20，支付宝存入人民币999.80元，当前余额为人民币1001.47元。");
         list.add("尾号4033账户03:31存入299.82元，余额1500.56元，摘要:辛毅支付宝转账 辛毅支付宝转账。[光大银行]");
@@ -67,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         list.add("贵账户*0977于2020年08月30日11:12在海南省分行转入资金0.10元，现余额3.17元，附言：支付宝转账9999.8元【交通银行】");
         list.add("王飞8月30日11时9分向您尾号8600的储蓄卡支付宝转账9999.98元存入人民币0.10元，活期余额4.28.[建设银行]");
         list.add("8月22日9时22分向您尾号6777的储蓄卡电子汇入存入人民币20000.00元,活期余额60399.06元。[建设银行]");
+        list.add("【招商银行】您账户0951于09月10日10:52收款人民币101.00，余额101.00，备注：支付宝-支付宝（中国）网络技术有限公，更多详情请查看招商银行APP动账通知。");
 
 
        for(int i=0;i<list.size();i++){

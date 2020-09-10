@@ -33,6 +33,7 @@ public class StringUtils {
                         result.get(i).indexOf("提现") >= 0 ||
                         result.get(i).indexOf("转入") >= 0 ||
                         result.get(i).indexOf("收入") >= 0 ||
+                        result.get(i).indexOf("收款") >= 0 ||
                         result.get(i).indexOf("转存") >=0) {
                         input=result.get(i);
                         input = input.replaceAll("@#", "");
