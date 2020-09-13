@@ -24,6 +24,7 @@ public class EquipmentInfoFragment extends BaseFragment {
     private TextView tvName;
     private TextView tvMacCode;
     private TextView tvIp;
+    private TextView tvVersion;
 
     @Nullable
     @Override
@@ -42,10 +43,12 @@ public class EquipmentInfoFragment extends BaseFragment {
         tvTitle.setText("设备信息");
         tvName = view.findViewById(R.id.tv_name);
         tvMacCode = view.findViewById(R.id.tv_mac);
+        tvVersion=view.findViewById(R.id.tv_version);
         tvIp = view.findViewById(R.id.tv_ip);
         String name = SystemUtil.getSystemModel();
         String mac = SystemUtil.recupAdresseMAC(getActivity());
         String ip = SystemUtil.getIpAddress(getActivity());
+        String version=SystemUtil.getVersionName(getActivity());
         if (!TextUtils.isDigitsOnly(name)) {
             tvName.setText(name);
         }
@@ -55,5 +58,10 @@ public class EquipmentInfoFragment extends BaseFragment {
         if (!TextUtils.isEmpty(ip)) {
             tvIp.setText(ip);
         }
+
+        if (!TextUtils.isEmpty(version)) {
+            tvVersion.setText(version);
+        }
+
     }
 }

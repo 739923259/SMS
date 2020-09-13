@@ -1,5 +1,6 @@
 package com.project.myapplicationsms.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.bean.LogBean;
+import com.project.myapplicationsms.ui.CheckSMSActivity;
 
 import org.litepal.LitePal;
 
@@ -56,6 +58,14 @@ public class MineFragment extends BaseFragment {
         tableLayout=view.findViewById(R.id.tab_layout);
         tableLayout.addTab(tableLayout.newTab().setText("成功"));
         tableLayout.addTab(tableLayout.newTab().setText("失败"));
+        tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent=new Intent(getActivity(), CheckSMSActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fl_monetary_replace, authStateFragmentSuccess).commit();
         tableLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

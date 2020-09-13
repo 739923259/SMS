@@ -56,7 +56,7 @@
         </activity>
         <activity
             android:theme="@style/AppTheme.NoActionBar"  android:screenOrientation="portrait" android:name=".ui.MainActivity"></activity>
-
+        <activity android:name=".ui.CheckSMSActivity" android:theme="@style/AppTheme.NoActionBar"  android:screenOrientation="portrait"></activity>
 
         <receiver android:name="SmsReceiver" android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="100">

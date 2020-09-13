@@ -239,7 +239,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
     public  void setSelectPositon(int positon){
-        if(positon==BottomBarView.FOUR){
+        if(positon==BottomBarView.FOUR&&mCurrentFragment!=findBusinessFragment){
             mCurrentFragment=findBusinessFragment;
             viewPager.setCurrentItem(3,true);
         }
