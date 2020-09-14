@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="#fff"
     android:layout_height="match_parent">
     <include layout="@layout/common_titlebar"></include>
 
     <LinearLayout
+
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:orientation="vertical"
@@ -97,6 +99,60 @@
                 android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"></TextView>
+        </LinearLayout>
+        <LinearLayout
+
+            android:paddingRight="15dp"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:minWidth="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="别名"
+                android:textColor="#222"
+                android:textSize="14sp"
+                />
+            <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="请输入别名"
+                    android:paddingLeft="5dp"
+                    android:minHeight="40dp"
+                    android:id="@+id/et_alia"
+                    android:textSize="14sp"
+                    android:background="@drawable/et_bg"
+                    android:textColor="#666"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ebebeb"
+                    />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_edit_alia"
+                android:paddingLeft="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="编辑"
+                android:textSize="14sp"
+                android:textColor="#999"
+                android:layout_gravity="center"
+                />
         </LinearLayout>
     </LinearLayout>
 

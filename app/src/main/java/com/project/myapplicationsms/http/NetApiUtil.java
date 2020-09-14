@@ -133,6 +133,15 @@ public class NetApiUtil {
             jsonParams.put("signKey", signKey);
             jsonParams.put("macCode", SystemUtil.recupAdresseMAC(context));
             jsonParams.put("deviceName",SystemUtil.getSystemModel());
+
+            String alia= BaseConfigPreferences.getInstance(context).getAlia();
+            if(!TextUtils.isEmpty(alia)){
+                jsonParams.put("deviceRemark ",alia);
+            }else{
+                jsonParams.put("deviceRemark ","");
+            }
+
+
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
             HttpCommon httpCommon = new HttpCommon(ApiUrlManager.BaseUrl+ApiUrlManager.API_INNER_SORSI, new NetConnectionIntercepter());

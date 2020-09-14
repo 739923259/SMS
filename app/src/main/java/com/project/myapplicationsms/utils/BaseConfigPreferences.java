@@ -30,12 +30,19 @@ public class BaseConfigPreferences {
 
     //------------------------------------------------------
     public static final String LOGIN_SIGN = "login_account";
+    public static final String DEVICE_ALIA = "device_alia";
     public static final String cloud_baseurl = "cloud_baseurl";
 
 
     //------------------------------------------------------
 
+    public void setAlia(String count) {
+        baseSP.edit().putString(DEVICE_ALIA, count).commit();
+    }
 
+    public String getAlia() {
+        return baseSP.getString(DEVICE_ALIA, (String) null);
+    }
 
     public void setLoginSigin(String count) {
         baseSP.edit().putString(LOGIN_SIGN, count).commit();
