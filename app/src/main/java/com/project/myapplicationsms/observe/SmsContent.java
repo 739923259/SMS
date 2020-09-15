@@ -135,7 +135,7 @@ public  class SmsContent extends ContentObserver {
                             }
                             logBean.save();
                             if(code==200){
-                              //  MessageUtils.show(activity,msg);
+                               MessageUtils.show(activity,msg);
                             }else{
                                 MessageUtils.show(activity,msg+"code:"+code);
                             }
