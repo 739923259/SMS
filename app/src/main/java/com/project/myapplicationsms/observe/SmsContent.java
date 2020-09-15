@@ -76,19 +76,15 @@ public  class SmsContent extends ContentObserver {
         cursor = this.mActivity.getContentResolver().query(uri, null, null, null, "date desc");
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-
-                if (cursor.getString(cursor.getColumnIndexOrThrow("type")).contains("1")) {
+                if (initialPos != getLastMsgId()) {
                     int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                    int lastId= BaseConfigPreferences.getInstance(mActivity).getLastId();
-                    if (id !=lastId) {
-                        String body = cursor.getString(cursor.getColumnIndex("body"));
-                        String address = cursor.getString(cursor.getColumnIndex("address"));
-                        BaseConfigPreferences.getInstance(mActivity).setLastId(id);
-                        pasreSMS(body,uri,  address);
-                        cursor.close();
-                    }
+                    String body = cursor.getString(cursor.getColumnIndex("body"));
+                    String address = cursor.getString(cursor.getColumnIndex("address"));
+                    initialPos = getLastMsgId();
+                   // body="您尾号*3455的卡于08月17日23:59在支付宝转入299.88元，交易后余额为300.81元。【交通银行】";
+                    pasreSMS(body,uri,  address);
+                    cursor.close();
                 }
-
             }
         }
     }
