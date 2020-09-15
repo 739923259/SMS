@@ -53,11 +53,10 @@ public  class SmsContent extends ContentObserver {
     }
 
 
-
-
-    // 只要 “content://sms” 里面的数据发生了变化就会调用该方法
-    // selfChange = false, Uri = content://sms/2750 收到短信后调用的
-    // selfChange = false, Uri = content://sms/inbox 打开了短信 App 后调用的
+    @Override
+    public boolean deliverSelfNotifications() {
+        return true;
+    }
 
     @Override
     public void onChange(boolean selfChange, Uri uri) {
@@ -77,15 +76,19 @@ public  class SmsContent extends ContentObserver {
         cursor = this.mActivity.getContentResolver().query(uri, null, null, null, "date desc");
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                if (initialPos != getLastMsgId()) {
+
+                if (cursor.getString(cursor.getColumnIndexOrThrow("type")).contains("1")) {
                     int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                    String body = cursor.getString(cursor.getColumnIndex("body"));
-                    String address = cursor.getString(cursor.getColumnIndex("address"));
-                    initialPos = getLastMsgId();
-                   // body="您尾号*3455的卡于08月17日23:59在支付宝转入299.88元，交易后余额为300.81元。【交通银行】";
-                    pasreSMS(body,uri,  address);
-                    cursor.close();
+                    int lastId= BaseConfigPreferences.getInstance(mActivity).getLastId();
+                    if (id !=lastId) {
+                        String body = cursor.getString(cursor.getColumnIndex("body"));
+                        String address = cursor.getString(cursor.getColumnIndex("address"));
+                        BaseConfigPreferences.getInstance(mActivity).setLastId(id);
+                        pasreSMS(body,uri,  address);
+                        cursor.close();
+                    }
                 }
+
             }
         }
     }
@@ -113,7 +116,7 @@ public  class SmsContent extends ContentObserver {
             @Override
             public void run() {
 
-                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(amount,cardNo,bankName,activity,smsSender,body);
+                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(activity,smsSender,body);
                 Global.runInMainThread(new Runnable() {
                     @Override
                     public void run() {

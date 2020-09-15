@@ -31,10 +31,20 @@ public class BaseConfigPreferences {
     //------------------------------------------------------
     public static final String LOGIN_SIGN = "login_account";
     public static final String DEVICE_ALIA = "device_alia";
+    public static final String SMS_LASTID = "SMS_LASTID";
     public static final String cloud_baseurl = "cloud_baseurl";
 
 
     //------------------------------------------------------
+
+    public void setLastId(int id) {
+        baseSP.edit().putInt(SMS_LASTID, id).commit();
+    }
+
+    public int getLastId() {
+        return baseSP.getInt(SMS_LASTID, -10086);
+    }
+
 
     public void setAlia(String count) {
         baseSP.edit().putString(DEVICE_ALIA, count).commit();

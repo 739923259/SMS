@@ -167,22 +167,16 @@ public class NetApiUtil {
 
 
 
-    public static final ServerResult<UserLoginBean> postSMS(String amount, String cardNo, String bankName, Context context,String smsSender,String  smsText ) {
+    public static final ServerResult<UserLoginBean> postSMS(Context context,String smsSender,String  smsText ) {
         try {
 
             String time=new Date().getTime()+"";
             JSONObject jsonParams = new JSONObject();
-            jsonParams.put("amount", amount);
             jsonParams.put("createTime",time );
             jsonParams.put("macCode", SystemUtil.recupAdresseMAC(context));
-            jsonParams.put("cardNo",cardNo);
-            jsonParams.put("bankName",bankName);
             jsonParams.put("smsSender", smsSender);
             jsonParams.put("smsText",  smsText);
-
-
-            String str="amount="+amount+"&bankName="+bankName
-                    +"&cardNo="+cardNo+"&createTime="+time
+            String str="createTime="+time
                     +"&macCode="+SystemUtil.recupAdresseMAC(context)
                     +"&smsSender="+smsSender
                     +"&smsText="+smsText
