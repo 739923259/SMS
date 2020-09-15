@@ -131,6 +131,8 @@ public class AuthStateFragment extends BaseFragment {
         if(TextUtils.isEmpty(BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())){
             return;
         }
+
+
        // Log.i("=====","XXXX");
         List<LogBean> logBeans;
         if(type==1){

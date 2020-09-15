@@ -16,6 +16,7 @@ import com.project.myapplicationsms.network.ServerResult;
 import com.project.myapplicationsms.network.ServerResultHeader;
 import com.project.myapplicationsms.utils.BaseConfigPreferences;
 import com.project.myapplicationsms.utils.MD5Utils;
+import com.project.myapplicationsms.utils.MessageUtils;
 import com.project.myapplicationsms.utils.NetworkUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 
@@ -191,7 +192,6 @@ public class NetApiUtil {
             ServerResult<UserLoginBean> resTagList = new ServerResult<UserLoginBean>();
             if (csResult != null) {
                 String responseStr = csResult.getResponseJson();
-                Log.i("===",responseStr);
                 resTagList.setCsResult(csResult);
                 if (!TextUtils.isEmpty(responseStr)) {
                     try {

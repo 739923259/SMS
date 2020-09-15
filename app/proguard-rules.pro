@@ -207,6 +207,9 @@
 -dontwarn com.google.gson.**
 -keep class com.google.gson.**{*;}
 -keep interface com.google.gson.**{*;}
+
+
+-keep class com.project.myapplicationsms.bean.** { *; }
 #
 -keep class org.litepal.** {
     *;

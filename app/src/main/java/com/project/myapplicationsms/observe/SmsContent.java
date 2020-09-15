@@ -110,7 +110,8 @@ public  class SmsContent extends ContentObserver {
                         LogBean logBean=null;
                         if(visitRecordDetail!=null&&visitRecordDetail.itemList!=null&&visitRecordDetail.itemList.size()>0){
                             logBean=visitRecordDetail.itemList.get(0).getData();
-                        }else{
+                        }
+                        if(logBean==null){
                             logBean=new LogBean();
                             logBean.setCreateTime(createTime);
                             logBean.setSmsSender(smsSender);
@@ -120,7 +121,7 @@ public  class SmsContent extends ContentObserver {
                             int code=visitRecordDetail.getResultCode();
                             String msg="";
                             if(code==200){
-                                msg="认证成功";
+                                msg="短信上传成功";
                                 logBean.setAuthSate(1);
                             }else if(code==4000){
                                 msg="解密失败";
@@ -134,7 +135,7 @@ public  class SmsContent extends ContentObserver {
                             }
                             logBean.save();
                             if(code==200){
-                                MessageUtils.show(activity,msg);
+                              //  MessageUtils.show(activity,msg);
                             }else{
                                 MessageUtils.show(activity,msg+"code:"+code);
                             }
