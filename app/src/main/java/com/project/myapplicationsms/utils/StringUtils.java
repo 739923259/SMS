@@ -35,6 +35,7 @@ public class StringUtils {
             String bankName=parseBankName(input);
             int indexFlag=-1;
             if(bankName.equals("工商银行")){
+                input=input.replaceAll("\\(.*\\)", "");//去除括号备注
                 indexFlag=input.indexOf("对方户名");
                 if(indexFlag>0){
                     input=input.substring(0,indexFlag);

@@ -97,12 +97,14 @@ public class MainActivity extends AppCompatActivity {
       //  list.add("杜聿球9月12日1时11分向您尾号8600的储蓄卡支付宝提现收入人民币5000.00元【民生银行】附言：支付宝转账9999.8元，存入人民币0.10元,活期余额1.04元。[建设银行]");
 
 
+        list.add("您尾号4963卡9月15日00:58工商银行收入((转账)5000.00元，余)))0.10元，余额2,905.11元，对方户名：陈德榆，对方账户尾号：6901。【工商银行】");
+       // list.add("陈德榆9月15日1时48分向您尾号4720的储蓄卡支付宝提现收入人民币3000.00元，存入人民币0.10元,活期余额5.11元。[建设银 ");
+
 
 
 
        for(int i=0;i<list.size();i++){
            Log.i("===", StringUtils.parseBankLastFour(list.get(i).toString())+"==="+StringUtils.parseBankName(list.get(i).toString())+"==="+StringUtils.parseInMoney(list.get(i).toString()));
-           // Log.i("===",StringUtils.isNumber(StringUtils.parseBankLastFour(list.get(i).toString()))+"");
        }
 
 
@@ -110,6 +112,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public static String change_str(String str){
+        String newStr = "";
+        int level = 0;
+        for (int i = 0; i < str.length(); ++i){
+            if (str.charAt(i) == '('){
+                if (level == 0) //check before incrementing
+                    newStr += "(";
+                level++;
+            } else if (str.charAt(i) == ')'){
+                level--;
+                if (level == 0) //check after incrementing
+                    newStr += ")";
+            } else {
+                newStr += str.charAt(i);
+            }
+        }
+
+        return newStr;
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

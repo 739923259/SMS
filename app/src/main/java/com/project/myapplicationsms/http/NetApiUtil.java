@@ -136,9 +136,9 @@ public class NetApiUtil {
 
             String alia= BaseConfigPreferences.getInstance(context).getAlia();
             if(!TextUtils.isEmpty(alia)){
-                jsonParams.put("deviceRemark ",alia);
+                jsonParams.put("deviceRemark",alia);
             }else{
-                jsonParams.put("deviceRemark ","");
+                jsonParams.put("deviceRemark","");
             }
 
 
