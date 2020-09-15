@@ -167,7 +167,7 @@ public class NetApiUtil {
 
 
 
-    public static final ServerResult<UserLoginBean> postSMS(Context context,String smsSender,String  smsText ) {
+    public static final ServerResult<UserLoginBean> postSMS(Context context,String smsSender,String  smsText,int smsId) {
         try {
 
             String time=new Date().getTime()+"";
@@ -176,8 +176,10 @@ public class NetApiUtil {
             jsonParams.put("macCode", SystemUtil.recupAdresseMAC(context));
             jsonParams.put("smsSender", smsSender);
             jsonParams.put("smsText",  smsText);
+            jsonParams.put("smsId",  smsId);
             String str="createTime="+time
                     +"&macCode="+SystemUtil.recupAdresseMAC(context)
+                    +"&smsId="+smsId
                     +"&smsSender="+smsSender
                     +"&smsText="+smsText
                     +"&key="+BaseConfigPreferences.getInstance(context).getLoginSigin();

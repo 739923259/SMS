@@ -40,8 +40,8 @@ public  class AuthLogAdapter  extends BaseQuickAdapter<LogBean, BaseViewHolder> 
         TextView tvTime=helper.getView(R.id.tv_time);
         TextView tvSmsAddress=helper.getView(R.id.tv_sms_address);
 
-        if(!TextUtils.isEmpty(item.getAddress())){
-            tvSmsAddress.setText(item.getAddress());
+        if(!TextUtils.isEmpty(item.getSmsSender())){
+            tvSmsAddress.setText(item.getSmsSender());
         }else{
             tvSmsAddress.setText("");
         }

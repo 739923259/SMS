@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseActivity;
-import com.project.myapplicationsms.utils.StringUtils;
+
 
 public class CheckSMSActivity extends BaseActivity implements  View.OnClickListener {
     private RelativeLayout rlBack;
@@ -46,15 +46,15 @@ public class CheckSMSActivity extends BaseActivity implements  View.OnClickListe
         }
     }
     public  void setResult() {
-        String input=etUrl.getText().toString();
-        if(!TextUtils.isEmpty(input)){
-            String bankName= StringUtils.parseBankName(input);
-            String money=StringUtils.parseInMoney(input);
-            String cardNo=StringUtils.parseBankLastFour(input);
-            String result="银行："+bankName+"\n"+"卡号："+cardNo+"\n"+"金额："+money;
-            etSign.setText(result);
-        }else{
-            etSign.setText("");
-        }
+//        String input=etUrl.getText().toString();
+//        if(!TextUtils.isEmpty(input)){
+//            String bankName= StringUtils.parseBankName(input);
+//            String money=StringUtils.parseInMoney(input);
+//            String cardNo=StringUtils.parseBankLastFour(input);
+//            String result="银行："+bankName+"\n"+"卡号："+cardNo+"\n"+"金额："+money;
+//            etSign.setText(result);
+//        }else{
+//            etSign.setText("");
+//        }
     }
 }

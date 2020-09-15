@@ -4,17 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.project.myapplicationsms.observe.SmsContent;
-import com.project.myapplicationsms.utils.StringUtils;
-import com.project.myapplicationsms.utils.SystemUtil;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
     public static final String CLASS_SMS_MANAGER = "com.android.internal.telephony.SmsApplication";
@@ -103,9 +97,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-       for(int i=0;i<list.size();i++){
-           Log.i("===", StringUtils.parseBankLastFour(list.get(i).toString())+"==="+StringUtils.parseBankName(list.get(i).toString())+"==="+StringUtils.parseInMoney(list.get(i).toString()));
-       }
+//       for(int i=0;i<list.size();i++){
+//           Log.i("===", StringUtils.parseBankLastFour(list.get(i).toString())+"==="+StringUtils.parseBankName(list.get(i).toString())+"==="+StringUtils.parseInMoney(list.get(i).toString()));
+//       }
+//
+//        FixSizeLinkedList<Integer> alist = new FixSizeLinkedList<>(3);
+//        alist.add(1234);
+//        alist.add(123);
+//        alist.add(34);
+//        alist.add(5);
+//        System.out.println(alist.contains(6));
+
+
 
 
 

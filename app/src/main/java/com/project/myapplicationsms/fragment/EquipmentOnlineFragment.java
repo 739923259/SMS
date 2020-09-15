@@ -1,18 +1,14 @@
 package com.project.myapplicationsms.fragment;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,8 +17,6 @@ import androidx.annotation.Nullable;
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.base.Global;
-import com.project.myapplicationsms.bean.LogBean;
-import com.project.myapplicationsms.bean.QiniuSettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.network.ApiUrlManager;
@@ -30,14 +24,8 @@ import com.project.myapplicationsms.network.ServerResult;
 import com.project.myapplicationsms.ui.MainActivity;
 import com.project.myapplicationsms.utils.BaseConfigPreferences;
 import com.project.myapplicationsms.utils.MessageUtils;
-import com.project.myapplicationsms.utils.StringUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
-
-import org.litepal.LitePal;
-
-import java.util.Date;
-import java.util.List;
 
 
 public class EquipmentOnlineFragment  extends BaseFragment implements View.OnClickListener {

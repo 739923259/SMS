@@ -61,8 +61,8 @@ public class MineFragment extends BaseFragment {
         tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent=new Intent(getActivity(), CheckSMSActivity.class);
-                startActivity(intent);
+                //Intent intent=new Intent(getActivity(), CheckSMSActivity.class);
+                //startActivity(intent);
                 return false;
             }
         });

@@ -13,14 +13,14 @@ public  class LogBean extends LitePalSupport implements Serializable {
     private  int authSate;
     private  String signKey;
     private  String url;
-    private  String address;
+    private  String smsSender;
 
-    public String getAddress() {
-        return address;
+    public String getSmsSender() {
+        return smsSender;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setSmsSender(String smsSender) {
+        this.smsSender = smsSender;
     }
 
     public String getUrl() {
