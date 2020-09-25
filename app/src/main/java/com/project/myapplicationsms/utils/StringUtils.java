@@ -1,7 +1,13 @@
 package com.project.myapplicationsms.utils;
+import android.util.Log;
+
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +83,7 @@ public class StringUtils {
                         result.get(i).indexOf("收入") >= 0 ||
                         result.get(i).indexOf("收款") >= 0 ||
                         result.get(i).indexOf("来账") >= 0 ||
+                        result.get(i).indexOf("入账") >= 0 ||
                         result.get(i).indexOf("转存") >=0) {
                         input=result.get(i);
                         input = input.replaceAll("@#", "");
@@ -107,14 +114,14 @@ public class StringUtils {
                 endIndex = input.indexOf("账户");
                 zhanghao = input.substring(beginIndex + 2, endIndex + 7);
             }
-            zhanghao = zhanghao.replace("*", "");
+           /* zhanghao = zhanghao.replace("*", "");
             Pattern pattern = Pattern.compile("[\\*0-9\\.]+");
             Matcher matcher = pattern.matcher(input);
             String reg = "[\u4e00-\u9fa5]";
             Pattern pat = Pattern.compile(reg);
             Matcher m = pat.matcher(zhanghao);
-            zhanghao = m.replaceAll("");
-            return zhanghao;
+            zhanghao = m.replaceAll("");*/
+            return zhanghao.replaceAll("[^0-9.]", "");
         } catch (Exception e) {
             return null;
         }
@@ -127,5 +134,43 @@ public class StringUtils {
         Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
         return pattern.matcher(string).matches();
     }
+
+
+    /*
+    *  Pattern pattern = Pattern.compile("\\d{2}:\\d{2}");
+            Matcher matcher = pattern.matcher(string);
+            ArrayList<String> list = new ArrayList();
+            while (matcher.find()) {
+                list.add(matcher.group());
+            }
+            if (list.size() > 0) {
+                return list.get(0);
+            }
+    * */
+
+    public  static  String parseDate(String string) {
+        try {
+            string=string.replace("时",":");
+            int begin=string.indexOf(":")-2;
+            int endIndex=string.indexOf(":")+3;
+            String date=string.substring(begin,endIndex);
+            String reg = "[\u4e00-\u9fa5]";
+            Pattern pat = Pattern.compile(reg);
+            Matcher m = pat.matcher(date);
+            date = m.replaceAll("");
+           String []arr= date.split(":");
+           if(arr.length==2){
+               DecimalFormat mFormat= new DecimalFormat("00");
+               arr[0]=mFormat.format(Double.valueOf(arr[0]));
+               arr[1]=mFormat.format(Double.valueOf(arr[1]));
+               return arr[0]+":"+arr[1];
+           }
+           return "";
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+
 
 }
