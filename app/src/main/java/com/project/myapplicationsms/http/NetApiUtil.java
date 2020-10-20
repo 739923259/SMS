@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.project.myapplicationsms.base.Global;
+import com.project.myapplicationsms.bean.AuthServerBean;
 import com.project.myapplicationsms.bean.QiniuSettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.intercepter.NetConnectionIntercepter;
@@ -126,7 +127,7 @@ public class NetApiUtil {
 
 
 
-    public static final ServerResult<UserLoginBean> postUserAuth(String url, String signKey, Context context) {
+    public static final ServerResult<AuthServerBean> postUserAuth(String url, String signKey, Context context) {
 
         try {
             JSONObject jsonParams = new JSONObject();
@@ -147,13 +148,13 @@ public class NetApiUtil {
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
             HttpCommon httpCommon = new HttpCommon(ApiUrlManager.BaseUrl+ApiUrlManager.API_INNER_SORSI, new NetConnectionIntercepter());
             ServerResultHeader csResult = httpCommon.getResponseAsCsResultPostBody(paramsMap, jsonParams.toString());
-            ServerResult<UserLoginBean> resTagList = new ServerResult<UserLoginBean>();
+            ServerResult<AuthServerBean> resTagList = new ServerResult<AuthServerBean>();
             if (csResult != null) {
                 String responseStr = csResult.getResponseJson();
                 resTagList.setCsResult(csResult);
                 if (!TextUtils.isEmpty(responseStr)) {
                     try {
-                        UserLoginBean userLogin = new Gson().fromJson(responseStr, UserLoginBean.class);
+                        AuthServerBean userLogin = new Gson().fromJson(responseStr, AuthServerBean.class);
                         resTagList.itemList.add(userLogin);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -162,7 +163,7 @@ public class NetApiUtil {
             }
             return resTagList;
         }catch (Exception e){
-            return   new ServerResult<UserLoginBean>();
+            return   new ServerResult<AuthServerBean>();
         }
     }
 

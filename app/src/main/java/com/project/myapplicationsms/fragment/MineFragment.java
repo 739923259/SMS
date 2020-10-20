@@ -1,6 +1,9 @@
 package com.project.myapplicationsms.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,14 +32,34 @@ public class MineFragment extends BaseFragment {
     private TabLayout tableLayout;
     AuthStateFragment authStateFragmentSuccess;
     AuthStateFragment authStateFragmentFail;
+    BankNoErrorFragment bankNoErrorFragment;
     private RelativeLayout rlBack;
     private  TextView tvTitle;
+
+    private MineFragment.MyBroadCastReceiver myBroadCastReceiver;
+
+
+    public class MyBroadCastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent!=null){
+                int type=intent.getIntExtra("selectTab",-1);
+                if(type==3){
+                    if(tableLayout!=null&&tableLayout.getTabAt(type-1)!=null){
+                        tableLayout.getTabAt(type-1).select();
+                    }
+                }
+            }
+        }
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(view==null){
             view=inflater.inflate(R.layout.fragment_mine_layout,null,false);
+            myBroadCastReceiver = new MineFragment.MyBroadCastReceiver();
         }
         authStateFragmentSuccess=new AuthStateFragment();
         Bundle bundleS=new Bundle();
@@ -46,6 +69,16 @@ public class MineFragment extends BaseFragment {
         Bundle bundleF=new Bundle();
         bundleF.putInt("type",2);
         authStateFragmentFail.setArguments(bundleF);
+
+        Bundle bundleE=new Bundle();
+        bundleF.putInt("type",3);
+        bankNoErrorFragment=new BankNoErrorFragment();
+        bankNoErrorFragment.setArguments(bundleE);
+
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.pateo.mybroadcast.tab");
+        getActivity().registerReceiver(myBroadCastReceiver,intentFilter);
         initView();
         return view;
     }
@@ -58,6 +91,7 @@ public class MineFragment extends BaseFragment {
         tableLayout=view.findViewById(R.id.tab_layout);
         tableLayout.addTab(tableLayout.newTab().setText("成功"));
         tableLayout.addTab(tableLayout.newTab().setText("失败"));
+        tableLayout.addTab(tableLayout.newTab().setText("异常账号"));
         tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -76,6 +110,8 @@ public class MineFragment extends BaseFragment {
                     transaction.replace(R.id.fl_monetary_replace, authStateFragmentSuccess).commit();
                 }else if(tab.getPosition()==1){
                     transaction.replace(R.id.fl_monetary_replace, authStateFragmentFail).commit();
+                }else if(tab.getPosition()==2){
+                    transaction.replace(R.id.fl_monetary_replace, bankNoErrorFragment).commit();
                 }
             }
 
@@ -90,5 +126,13 @@ public class MineFragment extends BaseFragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(myBroadCastReceiver!=null){
+            getActivity().unregisterReceiver(myBroadCastReceiver);
+        }
     }
 }

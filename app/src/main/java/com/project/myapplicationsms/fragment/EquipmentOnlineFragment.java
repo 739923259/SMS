@@ -1,5 +1,8 @@
 package com.project.myapplicationsms.fragment;
 
+import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -17,6 +20,8 @@ import androidx.annotation.Nullable;
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.base.Global;
+import com.project.myapplicationsms.bean.AuthServerBean;
+import com.project.myapplicationsms.bean.LogBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.network.ApiUrlManager;
@@ -26,6 +31,8 @@ import com.project.myapplicationsms.utils.BaseConfigPreferences;
 import com.project.myapplicationsms.utils.MessageUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
+
+import java.util.List;
 
 
 public class EquipmentOnlineFragment  extends BaseFragment implements View.OnClickListener {
@@ -38,6 +45,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     private  TextView tvSubmit1;
     private  TextView tvEdit;
     private static boolean flag = true;
+    private SoundPool soundPool;
     private Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -120,6 +128,37 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         mHandler.postDelayed(runnable, 5000*10);
     }
 
+
+    private void processCustomMessage() {
+        try {
+
+            soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+            int id = 1;
+            id = soundPool.load(getActivity(), R.raw.error, 1);
+            int finalId = id;
+            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                    soundPool.play(finalId, 1, 1, 0, 0, 1);
+                    Intent intent = new Intent();
+                    intent.setAction("com.pateo.mybroadcast.bank.error");
+                    intent.putExtra("refresh",3);
+                    getActivity().sendBroadcast(intent);
+                    MainActivity parentActivity = (MainActivity) getActivity();
+                    parentActivity.setSelectPositon(3);
+
+                    Intent intentTab = new Intent();
+                    intentTab.setAction("com.pateo.mybroadcast.tab");
+                    intentTab.putExtra("selectTab",3);
+                    getActivity().sendBroadcast(intentTab);
+
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
     public  void  submitData(){
         if(SystemUtil.isEmulator(getContext())){
             return ;
@@ -136,7 +175,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         ThreadUtil.executeMore(new Runnable() {
             @Override
             public void run() {
-                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postUserAuth(etUrl.getText().toString(),etSign.getText().toString(),getActivity());
+                ServerResult<AuthServerBean> visitRecordDetail = NetApiUtil.postUserAuth(etUrl.getText().toString(),etSign.getText().toString(),getActivity());
                 Global.runInMainThread(new Runnable() {
                     @Override
                     public void run() {
@@ -165,6 +204,21 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 setTimer();
                                 MainActivity parentActivity = (MainActivity) getActivity();
                                 parentActivity.setSelectPositon(3);
+                            }else if(code==7001){
+                                if(visitRecordDetail.itemList!=null&&visitRecordDetail.itemList.size()>0&&visitRecordDetail.itemList.get(0).getData()!=null){
+                                    List<AuthServerBean.DataBean.UnPayCardsBean> list=visitRecordDetail.itemList.get(0).getData().getUnPayCards();
+                                    for (int i=0;i<list.size();i++){
+                                        LogBean logBean=new LogBean();
+                                        logBean.setAuthSate(3);
+                                        logBean.setBankName(list.get(i).getBankName());
+                                        logBean.setCreateTime(list.get(i).getTime());
+                                        logBean.setCardNo(list.get(i).getCardNo());
+                                        logBean.setUserName(list.get(i).getUserName());
+                                        logBean.save();
+                                    }
+                                    processCustomMessage();
+                                }
+
                             }
                             if(code==5003){
                                 MessageUtils.show(getActivity(),msg);

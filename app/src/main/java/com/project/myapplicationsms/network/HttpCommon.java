@@ -190,6 +190,7 @@ public class HttpCommon {
                         } else {
                             is = bis;
                         }
+
                         responseStr = parse(response.body(), is, encoding);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -203,8 +204,6 @@ public class HttpCommon {
             csResult.setbNetworkProblem(true);
             ex.printStackTrace();
         }
-        //Log.d(TAG, "csResult = " + csResult);
-        //Log.d(TAG, "response = " + responseStr);
         csResult.setResponseJson(responseStr);
         return csResult;
     }
