@@ -166,11 +166,6 @@ public class HttpCommon {
             client = getDefaultHttpClient(false);
             Request request = builder.build();
             Response response = client.newCall(request).execute();
-//            int statusCode = response.code();
-//            Date date = response.headers().getDate("Date");
-//            if (date != null) {
-//                csResult.setServerTimeDate(date.getTime());
-//            }
             if (response.isSuccessful()) {
                 getCommonServerResult(response);
                 int bodyEncryptType = csResult.getBodyEncryptType();
@@ -195,6 +190,7 @@ public class HttpCommon {
                         e.printStackTrace();
                     }
                 }
+               // responseStr="{\"respMessage\":\"卡号异常，请核查\",\"data\":{\"unPayCards\":[{\"bankName\":\"招商\",\"time\":\"14:02\",\"userName\":\"小明\",\"cardNo\":\"6689\"},{\"bankName\":\"农业\",\"time\":\"14:02\",\"userName\":\"小明2\",\"cardNo\":\"6688\"}]},\"respCode\":\"7001\"}";
                 getResultBaseData(responseStr);
             } else {
                 csResult.setbNetworkProblem(true);
@@ -205,6 +201,7 @@ public class HttpCommon {
         }
         //Log.d(TAG, "csResult = " + csResult);
         //Log.d(TAG, "response = " + responseStr);
+        //responseStr="{\"respMessage\":\"卡号异常，请核查\",\"data\":{\"unPayCards\":[{\"bankName\":\"招商\",\"time\":\"14:02\",\"userName\":\"小明\",\"cardNo\":\"6689\"},{\"bankName\":\"农业\",\"time\":\"14:02\",\"userName\":\"小明2\",\"cardNo\":\"6688\"}]},\"respCode\":\"7001\"}";
         csResult.setResponseJson(responseStr);
         return csResult;
     }

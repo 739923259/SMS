@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Create by xuqunxing on  2019/5/9
  */
 public class BaseBean implements Serializable {
-    private  String respMessage;
-    private  int respCode;
+    public   String respMessage;
+    public   int respCode;
 
     public String getRespMessage() {
         return respMessage;

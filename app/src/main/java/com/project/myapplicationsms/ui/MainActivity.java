@@ -245,6 +245,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
+
+
    @Override
     protected void onDestroy() {
         super.onDestroy();

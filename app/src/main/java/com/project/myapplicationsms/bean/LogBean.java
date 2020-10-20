@@ -14,6 +14,15 @@ public  class LogBean extends LitePalSupport implements Serializable {
     private  String signKey;
     private  String url;
     private  String address;
+    private  String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getAddress() {
         return address;

@@ -1,7 +1,10 @@
 package com.project.myapplicationsms.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -23,6 +26,7 @@ import com.project.myapplicationsms.base.BaseFragment;
 import com.project.myapplicationsms.base.Global;
 import com.project.myapplicationsms.bean.LogBean;
 import com.project.myapplicationsms.bean.QiniuSettingBean;
+import com.project.myapplicationsms.bean.UpdateBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.network.ApiUrlManager;
@@ -50,6 +54,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     private  TextView tvSubmit1;
     private  TextView tvEdit;
     private static boolean flag = true;
+    private  SoundPool soundPool;
     private Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -110,27 +115,49 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
        if(!TextUtils.isEmpty(url)&&!TextUtils.isEmpty(sigin)){
            submitData();
        }
-       // LitePal.deleteAll(LogBean.class);
-       /* for(int i=0;i<50;i++){
-            LogBean logBean=new LogBean();
-            logBean.setAmount("100");
-            logBean.setCreateTime(new Date().getTime()+"");
-            logBean.setBankName("中国银行"+i);
-            logBean.setCardNo("7777");
-            if(i%2==0){
-                logBean.setAuthSate(1);
-            }else{
-                logBean.setAuthSate(2);
-            }
-            logBean.save();
-        }
-        List<LogBean> allMovies = LitePal.findAll(LogBean.class);*/
+
     }
+
+
+
+
+
 
     private void setTimer(){
         mHandler.removeCallbacks(runnable);
         mHandler.postDelayed(runnable, 5000*10);
     }
+
+    private void processCustomMessage() {
+        try {
+
+            soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+            int id = 1;
+            id = soundPool.load(getActivity(), R.raw.man, 1);
+            int finalId = id;
+            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                    soundPool.play(finalId, 1, 1, 0, 0, 1);
+                    Intent intent = new Intent();
+                    intent.setAction("com.pateo.mybroadcast.bank.error");
+                    intent.putExtra("refresh",1);
+                    getActivity().sendBroadcast(intent);
+                    MainActivity parentActivity = (MainActivity) getActivity();
+                    parentActivity.setSelectPositon(3);
+
+                    Intent intentTab = new Intent();
+                    intentTab.setAction("com.pateo.mybroadcast.tab");
+                    intentTab.putExtra("selectTab",3);
+                    getActivity().sendBroadcast(intentTab);
+
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
 
     public  void  submitData(){
         if(SystemUtil.isEmulator(getContext())){
@@ -177,6 +204,21 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 setTimer();
                                 MainActivity parentActivity = (MainActivity) getActivity();
                                 parentActivity.setSelectPositon(3);
+                            }else if(code==7001){
+                                if(visitRecordDetail.itemList!=null&&visitRecordDetail.itemList.size()>0&&visitRecordDetail.itemList.get(0).getData()!=null){
+                                    List<UserLoginBean.DataBean.UnPayCardsBean> list=visitRecordDetail.itemList.get(0).getData().getUnPayCards();
+                                    for (int i=0;i<list.size();i++){
+                                        LogBean logBean=new LogBean();
+                                        logBean.setAuthSate(3);
+                                        logBean.setBankName(list.get(i).getBankName());
+                                        logBean.setCreateTime(list.get(i).getTime());
+                                        logBean.setCardNo(list.get(i).getCardNo());
+                                        logBean.setUserName(list.get(i).getUserName());
+                                        logBean.save();
+                                    }
+                                    processCustomMessage();
+                                }
+
                             }
                             if(code==5003){
                                 MessageUtils.show(getActivity(),msg);
