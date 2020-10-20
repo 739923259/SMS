@@ -201,7 +201,7 @@ public class HttpCommon {
         }
         //Log.d(TAG, "csResult = " + csResult);
         //Log.d(TAG, "response = " + responseStr);
-        //responseStr="{\"respMessage\":\"卡号异常，请核查\",\"data\":{\"unPayCards\":[{\"bankName\":\"招商\",\"time\":\"14:02\",\"userName\":\"小明\",\"cardNo\":\"6689\"},{\"bankName\":\"农业\",\"time\":\"14:02\",\"userName\":\"小明2\",\"cardNo\":\"6688\"}]},\"respCode\":\"7001\"}";
+       // responseStr="{\"respMessage\":\"卡号异常，请核查\",\"data\":{\"unPayCards\":[{\"bankName\":\"招商\",\"time\":\"14:02\",\"userName\":\"小明\",\"cardNo\":\"6689\"},{\"bankName\":\"农业\",\"time\":\"14:02\",\"userName\":\"小明2\",\"cardNo\":\"6688\"}]},\"respCode\":\"7001\"}";
         csResult.setResponseJson(responseStr);
         return csResult;
     }

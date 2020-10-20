@@ -133,7 +133,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
 
             soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
             int id = 1;
-            id = soundPool.load(getActivity(), R.raw.man, 1);
+            id = soundPool.load(getActivity(), R.raw.error, 1);
             int finalId = id;
             soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                 @Override
