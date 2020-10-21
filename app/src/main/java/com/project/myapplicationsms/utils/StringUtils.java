@@ -52,6 +52,12 @@ public class StringUtils {
                 indexFlag=input.indexOf("摘要");
                 if(indexFlag>0){
                     input=input.substring(0,indexFlag);
+                }else  {
+                    indexFlag=input.indexOf("交易说明");
+                    if(indexFlag>0){
+                        input=input.substring(0,indexFlag);
+                    }
+
                 }
             }else if(bankName.equals("交通银行")){
                 indexFlag=input.indexOf("附言");

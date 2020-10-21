@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 //        list.add("陈德榆9月15日1时48分向您尾号4720的储蓄卡支付宝提现收入人民币3000.00元，存入人民币0.10元,活期余额5.11元。[建设银 ");
 
 
-        list.add("您的借记卡账户2572，于09月23日收入(网银跨行)人民币500.00元,交易后余额20958.35【中国银行】");
+        list.add("尊敬的客户：您尾号5658账户17:47存入999.88元，余额1500.45元，交易说明:交易类型-银联入账；付款方名称-刘一飞；付款方账号-6228****6470。[光大银行]");
 
        for(int i=0;i<list.size();i++){
            Log.i("===", StringUtils.parseBankLastFour(list.get(i).toString())+"==="+StringUtils.parseBankName(list.get(i).toString())+"==="+StringUtils.parseInMoney(list.get(i).toString()));
