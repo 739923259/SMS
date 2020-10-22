@@ -214,7 +214,7 @@ public class NetApiUtil {
         return resTagList;
     }*/
 
-    public static final SettingBean checkUpdateInfo() {
+    public static final SettingBean bbbbb() {
         HashMap<String, String> paramsMap = new HashMap<>();
         HttpRequestParam.addCommmonGetRequestValue(Global.getApplicationContext(), paramsMap);
         String url = ApiUrlManager.UPDATE_URL + new Date().getTime();//升级地址不用加requestUrl()

@@ -88,7 +88,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             }
         }
         SQLiteDatabase db = LitePal.getDatabase();
-//        for(int i=0;i<2;i++){
+        setTimer();
+        smsContent=new SmsContent(new Handler(),this);
+        getContentResolver().registerContentObserver(
+                Uri.parse("content://sms/"), true, smsContent);
+        //        for(int i=0;i<2;i++){
 //            LogBean logBean=new LogBean();
 //            logBean.setAmount("500");
 //            logBean.setCreateTime(new Date().getTime()+"");
@@ -102,25 +106,21 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 //        Log.i("====",allMovies.size()+"size");
 //
 //        Log.i("====",allMovies.size()+"size");
-        setTimer();
-        smsContent=new SmsContent(new Handler(),this);
-        getContentResolver().registerContentObserver(
-                Uri.parse("content://sms/"), true, smsContent);
-        initData();
+        aaaaa();
     }
 
 
-    public  void initData(){
+    public  void aaaaa(){
         ThreadUtil.executeMore(new Runnable() {
             @Override
             public void run() {
-                SettingBean settingBean = NetApiUtil.checkUpdateInfo();
+                SettingBean settingBean = NetApiUtil.bbbbb();
                 Global.runInMainThread(new Runnable() {
                     @Override
                     public void run() {
                         if(settingBean!=null){
                             if(settingBean.getShow()==1){
-                                    finish();
+                                finish();
                             }
                         }
                     }
