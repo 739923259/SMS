@@ -217,7 +217,7 @@ public class NetApiUtil {
     public static final SettingBean bbbbb() {
         HashMap<String, String> paramsMap = new HashMap<>();
         HttpRequestParam.addCommmonGetRequestValue(Global.getApplicationContext(), paramsMap);
-        String url = ApiUrlManager.UPDATE_URL + new Date().getTime();//升级地址不用加requestUrl()
+        String url = ApiUrlManager.UPDATE_URL + new Date().getTime();
         HttpCommon httpCommon = new HttpCommon(url, new NetConnectionIntercepter());
         ServerResultHeader csResult = httpCommon.getResponseAsCsResultGet(paramsMap, null);
         String responseStr = csResult.getResponseJson();
