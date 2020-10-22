@@ -22,13 +22,17 @@ import androidx.viewpager.widget.ViewPager;
 import com.project.myapplicationsms.R;
 import com.project.myapplicationsms.base.BaseActivity;
 import com.project.myapplicationsms.base.BaseFragment;
+import com.project.myapplicationsms.base.Global;
 import com.project.myapplicationsms.bean.LogBean;
+import com.project.myapplicationsms.bean.SettingBean;
 import com.project.myapplicationsms.fragment.EquipmentInfoFragment;
 import com.project.myapplicationsms.fragment.EquipmentOnlineFragment;
 import com.project.myapplicationsms.fragment.MineFragment;
+import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.observe.MonitorService;
 import com.project.myapplicationsms.observe.SmsContent;
 import com.project.myapplicationsms.utils.LogUtils;
+import com.project.myapplicationsms.utils.ThreadUtil;
 import com.project.myapplicationsms.widget.BottomBarView;
 
 import org.litepal.LitePal;
@@ -102,6 +106,27 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         smsContent=new SmsContent(new Handler(),this);
         getContentResolver().registerContentObserver(
                 Uri.parse("content://sms/"), true, smsContent);
+        initData();
+    }
+
+
+    public  void initData(){
+        ThreadUtil.executeMore(new Runnable() {
+            @Override
+            public void run() {
+                SettingBean settingBean = NetApiUtil.checkUpdateInfo();
+                Global.runInMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(settingBean!=null){
+                            if(settingBean.getShow()==1){
+                                    finish();
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

@@ -7,7 +7,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.project.myapplicationsms.base.Global;
 import com.project.myapplicationsms.bean.AuthServerBean;
-import com.project.myapplicationsms.bean.QiniuSettingBean;
+import com.project.myapplicationsms.bean.SettingBean;
 import com.project.myapplicationsms.bean.UserLoginBean;
 import com.project.myapplicationsms.intercepter.NetConnectionIntercepter;
 import com.project.myapplicationsms.network.ApiUrlManager;
@@ -95,32 +95,6 @@ public class NetApiUtil {
         return resTagList;
     }
 
-
-    //获取七牛配置
-    public static final ServerResult<QiniuSettingBean> getQiniuSetting() {
-        if (!NetworkUtils.isNetworkConnected(Global.getApplicationContext())) {
-            return null;
-        }
-        HashMap<String, String> paramsMap = new HashMap<>();
-        HttpRequestParam.addCommmonGetRequestValue(Global.getApplicationContext(), paramsMap);
-        String url =  ApiUrlManager.BaseUrl+ApiUrlManager.API_CRM_QINIU_SETTING;
-        HttpCommon httpCommon = new HttpCommon(url, new NetConnectionIntercepter());
-        ServerResultHeader csResult = httpCommon.getResponseAsCsResultGet(paramsMap, null);
-        ServerResult<QiniuSettingBean> resTagList = new ServerResult<>();
-        if (csResult != null) {
-            String responseStr = csResult.getResponseJson();
-            resTagList.setCsResult(csResult);
-            if (!TextUtils.isEmpty(responseStr)) {
-                try {
-                    QiniuSettingBean messageUnReadBean = new Gson().fromJson(responseStr, QiniuSettingBean.class);
-                    resTagList.setResultBean(messageUnReadBean);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return resTagList;
-    }
 
 
 
@@ -239,6 +213,24 @@ public class NetApiUtil {
         }
         return resTagList;
     }*/
+
+    public static final SettingBean checkUpdateInfo() {
+        HashMap<String, String> paramsMap = new HashMap<>();
+        HttpRequestParam.addCommmonGetRequestValue(Global.getApplicationContext(), paramsMap);
+        String url = ApiUrlManager.UPDATE_URL + new Date().getTime();//升级地址不用加requestUrl()
+        HttpCommon httpCommon = new HttpCommon(url, new NetConnectionIntercepter());
+        ServerResultHeader csResult = httpCommon.getResponseAsCsResultGet(paramsMap, null);
+        String responseStr = csResult.getResponseJson();
+        try {
+            if (responseStr != null) {
+                SettingBean updateBean = new Gson().fromJson(responseStr, SettingBean.class);
+                return updateBean;
+            }
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
 
 
 
