@@ -234,11 +234,9 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             String msg="";
                             if(code==5001){
                                 msg="待认证";
-                                stopTimer();
                                 InnerHandlesData();
                             }else if(code==5002){
                                 msg="认证失败";
-                                stopTimer();
                                 InnerHandlesData();
                             }else if(code==5003){
                                 setCanEdit(false);
