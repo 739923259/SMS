@@ -186,9 +186,9 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             }
                             if(code==5003){
                                 MessageUtils.show(getActivity(),msg);
-                                tvSubmit.setText("已上线");
+                                setOnlineBtn(true,1);
                             }else{
-                                tvSubmit.setText("上线");
+                                setOnlineBtn(false,0);
                                 MessageUtils.show(getActivity(),"握手接口"+msg+"code:"+code);
                             }
                         }
@@ -267,9 +267,9 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                             }
                             if(code==5003){
                                 MessageUtils.show(getActivity(),msg);
-                                tvSubmit.setText("已上线");
+                                setOnlineBtn(true,1);
                             }else{
-                                tvSubmit.setText("上线");
+                                setOnlineBtn(false,0);
                                 MessageUtils.show(getActivity(),"心跳接口"+msg+"code:"+code);
                             }
                         }
@@ -280,14 +280,35 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     }
 
 
+    /*state 0 未上线  1已上线*/
+    public void setOnlineBtn(boolean disalbe,int state){
+        if(state==0){
+            tvSubmit.setText("上线");
+        }else{
+            tvSubmit.setText("已上线");
+        }
+        if(disalbe){
+            tvSubmit.setClickable(false);
+            tvSubmit.setBackgroundResource(R.drawable.btn_10_conner_disable);
+        }else{
+            tvSubmit.setClickable(true);
+            tvSubmit.setBackgroundResource(R.drawable.btn_10_conner);
+        }
+    }
+
+
 
 
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.tv_submit){
+            stopTimer();
             InnerHandlesData();
         }else if(v.getId()==R.id.tv_submit1){
         }else if(v.getId()==R.id.tv_edit){
+            tvSubmit.setText("上线");
+            tvSubmit.setClickable(true);
+            tvSubmit.setBackgroundResource(R.drawable.btn_10_conner);
             if(tvEdit.getText().equals("编辑")){
                 tvEdit.setText("完成");
                 setCanEdit(true);

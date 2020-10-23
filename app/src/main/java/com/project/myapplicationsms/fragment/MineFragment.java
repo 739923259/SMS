@@ -45,8 +45,12 @@ public class MineFragment extends BaseFragment {
             if(intent!=null){
                 int type=intent.getIntExtra("selectTab",-1);
                 if(type==3){
-                    if(tableLayout!=null&&tableLayout.getTabAt(type-1)!=null){
-                        tableLayout.getTabAt(type-1).select();
+                    try {
+                        if(tableLayout!=null&&tableLayout.getTabAt(type-1)!=null){
+                            tableLayout.getTabAt(type-1).select();
+                        }
+                    }catch (Exception e){
+
                     }
                 }
             }
