@@ -113,6 +113,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
 
     private void setTimer(){
         mHandler.removeCallbacks(runnable);
+        flag=true;
         mHandler.postDelayed(runnable, DELAY_TIME);
     }
 
