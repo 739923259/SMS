@@ -15,6 +15,15 @@ public  class LogBean extends LitePalSupport implements Serializable {
     private  String url;
     private  String smsSender;
     private  String userName;
+    private String fomartime;
+
+    public String getFomartime() {
+        return fomartime;
+    }
+
+    public void setFomartime(String fomartime) {
+        this.fomartime = fomartime;
+    }
 
     public String getUserName() {
         return userName;

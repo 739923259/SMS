@@ -49,6 +49,15 @@ public class AuthServerBean extends BaseBean {
             private String time;
             private String userName;
             private String cardNo;
+            private String sysTime;
+
+            public String getSysTime() {
+                return sysTime;
+            }
+
+            public void setSysTime(String sysTime) {
+                this.sysTime = sysTime;
+            }
 
             public String getBankName() {
                 return bankName;

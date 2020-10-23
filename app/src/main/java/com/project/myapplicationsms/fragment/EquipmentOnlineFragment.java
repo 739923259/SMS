@@ -6,6 +6,7 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,14 +47,16 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
     private  TextView tvEdit;
     private static boolean flag = true;
     private SoundPool soundPool;
+    private  static  final  int DELAY_TIME=5000*10;
     private Handler mHandler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
             //在这里执行定时需要的操作
+          //  Log.i("====",flag+"");
             if (flag) {
-                submitData();
-                mHandler.postDelayed(this, 5000*10);
+                InnerSorsiData();
+                mHandler.postDelayed(this, DELAY_TIME);
 
             }
         }
@@ -104,28 +107,13 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
        }
 
        if(!TextUtils.isEmpty(url)&&!TextUtils.isEmpty(sigin)){
-           submitData();
+           InnerHandlesData();
        }
-       // LitePal.deleteAll(LogBean.class);
-       /* for(int i=0;i<50;i++){
-            LogBean logBean=new LogBean();
-            logBean.setAmount("100");
-            logBean.setCreateTime(new Date().getTime()+"");
-            logBean.setBankName("中国银行"+i);
-            logBean.setCardNo("7777");
-            if(i%2==0){
-                logBean.setAuthSate(1);
-            }else{
-                logBean.setAuthSate(2);
-            }
-            logBean.save();
-        }
-        List<LogBean> allMovies = LitePal.findAll(LogBean.class);*/
     }
 
     private void setTimer(){
         mHandler.removeCallbacks(runnable);
-        mHandler.postDelayed(runnable, 5000*10);
+        mHandler.postDelayed(runnable, DELAY_TIME);
     }
 
 
@@ -155,11 +143,12 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                 }
             });
         } catch (Exception e) {
-
+           // Log.i("====",e.getMessage());
         }
     }
 
-    public  void  submitData(){
+    /*woshou*/
+    public  void  InnerHandlesData(){
         if(SystemUtil.isEmulator(getContext())){
             return ;
         }
@@ -175,27 +164,82 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         ThreadUtil.executeMore(new Runnable() {
             @Override
             public void run() {
-                ServerResult<AuthServerBean> visitRecordDetail = NetApiUtil.postUserAuth(etUrl.getText().toString(),etSign.getText().toString(),getActivity());
+                ServerResult<AuthServerBean> visitRecordDetail = NetApiUtil.postUserAuth(1,etUrl.getText().toString(),etSign.getText().toString(),getActivity());
                 Global.runInMainThread(new Runnable() {
                     @Override
                     public void run() {
                         if(visitRecordDetail!=null){
                             int code=visitRecordDetail.getResultCode();
                             String msg="";
-                            if(code==200){
-                                setCanEdit(false);
-                                msg="认证成功";
-                                BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
-                                BaseConfigPreferences.getInstance(getActivity()).setBaseUrl(etUrl.getText().toString());
-                                setTimer();
-                                MainActivity parentActivity = (MainActivity) getActivity();
-                                parentActivity.setSelectPositon(3);
-                            }else if(code==4000){
-                                msg="解密失败";
-                            }else if(code==5001){
+                            if(code==5001){
                                 msg="待认证";
                             }else if(code==5002){
                                 msg="认证失败";
+                            }else if(code==5003){
+                                setCanEdit(false);
+                                msg="认证成功";
+                                BaseConfigPreferences.getInstance(getActivity()).setBaseUrl(etUrl.getText().toString());
+                                BaseConfigPreferences.getInstance(getActivity()).setLoginSigin(etSign.getText().toString());
+                                setTimer();
+                                MainActivity parentActivity = (MainActivity) getActivity();
+                                parentActivity.setSelectPositon(3);
+                            }
+                            if(code==5003){
+                                MessageUtils.show(getActivity(),msg);
+                                tvSubmit.setText("已上线");
+                            }else{
+                                tvSubmit.setText("上线");
+                                MessageUtils.show(getActivity(),"握手接口"+msg+"code:"+code);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /*xintiao*/
+    public  void  InnerSorsiData(){
+        if(SystemUtil.isEmulator(getContext())){
+            return ;
+        }
+        if(TextUtils.isEmpty(etUrl.getText().toString())){
+            Global.runInMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    MessageUtils.show(getActivity(),"请输入云端地址");
+                }
+            });
+            return;
+        }
+        if(TextUtils.isEmpty(etSign.getText().toString())){
+            Global.runInMainThread(new Runnable() {
+                @Override
+                public void run() {
+                    MessageUtils.show(getActivity(),"请输入设备key");
+                }
+            });
+            return;
+        }
+        ApiUrlManager.BaseUrl=etUrl.getText().toString().trim();
+        ThreadUtil.executeMore(new Runnable() {
+            @Override
+            public void run() {
+                ServerResult<AuthServerBean> visitRecordDetail = NetApiUtil.postUserAuth(2,etUrl.getText().toString(),etSign.getText().toString(),getActivity());
+                Global.runInMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(visitRecordDetail!=null){
+                            int code=visitRecordDetail.getResultCode();
+                            String msg="";
+                            if(code==5001){
+                                msg="待认证";
+                                stopTimer();
+                                InnerHandlesData();
+                            }else if(code==5002){
+                                msg="认证失败";
+                                stopTimer();
+                                InnerHandlesData();
                             }else if(code==5003){
                                 setCanEdit(false);
                                 msg="认证成功";
@@ -211,7 +255,8 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                         LogBean logBean=new LogBean();
                                         logBean.setAuthSate(3);
                                         logBean.setBankName(list.get(i).getBankName());
-                                        logBean.setCreateTime(list.get(i).getTime());
+                                        logBean.setCreateTime(list.get(i).getSysTime());
+                                        logBean.setFomartime(list.get(i).getTime());
                                         logBean.setCardNo(list.get(i).getCardNo());
                                         logBean.setUserName(list.get(i).getUserName());
                                         logBean.save();
@@ -225,7 +270,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 tvSubmit.setText("已上线");
                             }else{
                                 tvSubmit.setText("上线");
-                                MessageUtils.show(getActivity(),msg+"code:"+code);
+                                MessageUtils.show(getActivity(),"心跳接口"+msg+"code:"+code);
                             }
                         }
                     }
@@ -234,13 +279,14 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         });
     }
 
+
+
+
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.tv_submit){
-            submitData();
+            InnerHandlesData();
         }else if(v.getId()==R.id.tv_submit1){
-           // String input="您尾号7293的储蓄卡6月12日7时49分支付宝提现收入人民币500.09元,活期余额611.33元。[建设银行]";
-           // pasreSMS(input);
         }else if(v.getId()==R.id.tv_edit){
             if(tvEdit.getText().equals("编辑")){
                 tvEdit.setText("完成");

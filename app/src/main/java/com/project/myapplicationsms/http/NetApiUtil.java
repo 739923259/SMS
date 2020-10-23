@@ -101,7 +101,7 @@ public class NetApiUtil {
 
 
 
-    public static final ServerResult<AuthServerBean> postUserAuth(String url, String signKey, Context context) {
+    public static final ServerResult<AuthServerBean> postUserAuth(int type,String url, String signKey, Context context) {
 
         try {
             JSONObject jsonParams = new JSONObject();
@@ -120,7 +120,14 @@ public class NetApiUtil {
 
             HashMap<String, String> paramsMap = new HashMap<>();
             HttpRequestParam.addCommmonPostRequestValue(Global.getApplicationContext(), paramsMap);
-            HttpCommon httpCommon = new HttpCommon(ApiUrlManager.BaseUrl+ApiUrlManager.API_INNER_SORSI, new NetConnectionIntercepter());
+            String pathUrl="";
+            if(type==1){//握手
+                pathUrl= pathUrl=ApiUrlManager.BaseUrl+ApiUrlManager.API_INNER_HANDS;
+            }else {//心跳
+                pathUrl=ApiUrlManager.BaseUrl+ApiUrlManager.API_INNER_SORSI;
+            }
+            Log.i("====",pathUrl);
+            HttpCommon httpCommon = new HttpCommon(pathUrl, new NetConnectionIntercepter());
             ServerResultHeader csResult = httpCommon.getResponseAsCsResultPostBody(paramsMap, jsonParams.toString());
             ServerResult<AuthServerBean> resTagList = new ServerResult<AuthServerBean>();
             if (csResult != null) {
