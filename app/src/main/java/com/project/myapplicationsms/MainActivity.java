@@ -100,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
 //        list.add("陈德榆9月15日1时48分向您尾号4720的储蓄卡支付宝提现收入人民币3000.00元，存入人民币0.10元,活期余额5.11元。[建设银 ");
 
 
-        list.add("尊敬的客户：您尾号5658账户17:47存入999.88元，余额1500.45元，交易说明:交易类型-银联入账；付款方名称-刘一飞；付款方账号-6228****6470。[光大银行]");
+        list.add("【招商银行】您账户0951于09月12日00:36收到本行转入人民币2.00，余额7.67，付方王俊锋，账号尾号0718，备注：收款人民币500.00元");
+        list.add("【招商银行】您账户5165于10月22日22:32转账汇款人民币299.98，手续费人民币0.00，收款人：李达润，请以收款人实际入账为准");
+        list.add("【招商银行】您账户0951于09月12日00:36收款人民币1000.00，余额1005.67，备注：支付宝-支付宝（中国）网络技术有限公，更多详情请查看招商银行APP动账通知。");
 
        for(int i=0;i<list.size();i++){
            Log.i("===", StringUtils.parseBankLastFour(list.get(i).toString())+"==="+StringUtils.parseBankName(list.get(i).toString())+"==="+StringUtils.parseInMoney(list.get(i).toString()));

@@ -90,6 +90,7 @@ public class StringUtils {
                         result.get(i).indexOf("收款") >= 0 ||
                         result.get(i).indexOf("来账") >= 0 ||
                         result.get(i).indexOf("入账") >= 0 ||
+                        result.get(i).indexOf("转账汇款") >= 0 ||
                         result.get(i).indexOf("转存") >=0) {
                         input=result.get(i);
                         input = input.replaceAll("@#", "");
