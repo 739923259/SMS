@@ -95,7 +95,7 @@ public  class SmsContent extends ContentObserver {
             return ;
         }
 
-        if(body.indexOf("银行")<0&&body.indexOf("余额")<0){
+        if(body.indexOf("银行")<0){
             return;
         }
         Activity activity= (Activity) this.mActivity;
