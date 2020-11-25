@@ -109,6 +109,7 @@ public class NetApiUtil {
             jsonParams.put("signKey", signKey);
             jsonParams.put("macCode", SystemUtil.recupAdresseMAC(context));
             jsonParams.put("deviceName",SystemUtil.getSystemModel());
+            jsonParams.put("dsVersion",SystemUtil.getVersionName(context));
 
             String alia= BaseConfigPreferences.getInstance(context).getAlia();
             if(!TextUtils.isEmpty(alia)){

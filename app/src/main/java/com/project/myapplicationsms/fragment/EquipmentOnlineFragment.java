@@ -148,6 +148,25 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         }
     }
 
+
+    private void errorIpTip() {
+        try {
+
+            soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+            int id = 2;
+            id = soundPool.load(getActivity(), R.raw.error_ip, 1);
+            int finalId = id;
+            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                    soundPool.play(finalId, 1, 1, 0, 0, 1);
+                }
+            });
+        } catch (Exception e) {
+            // Log.i("====",e.getMessage());
+        }
+    }
+
     /*woshou*/
     public  void  InnerHandlesData(){
         if(SystemUtil.isEmulator(getContext())){
@@ -247,7 +266,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 setTimer();
                                 MainActivity parentActivity = (MainActivity) getActivity();
                                 parentActivity.setSelectPositon(3);
-                            }else if(code==7001){
+                            }else if(code==7001){//卡号异常
                                 if(visitRecordDetail.itemList!=null&&visitRecordDetail.itemList.size()>0&&visitRecordDetail.itemList.get(0).getData()!=null){
                                     List<AuthServerBean.DataBean.UnPayCardsBean> list=visitRecordDetail.itemList.get(0).getData().getUnPayCards();
                                     for (int i=0;i<list.size();i++){
@@ -263,7 +282,10 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                     processCustomMessage();
                                 }
 
+                            }else if(code==7002){//非法ip
+                                errorIpTip();
                             }
+
                             if(code==5003){
                                 MessageUtils.show(getActivity(),msg);
                                 setOnlineBtn(true,1);
