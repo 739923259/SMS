@@ -569,7 +569,14 @@ public class SystemUtil {
     }
 
 
-
+    public  static  boolean  isnetwork(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetworkInfo!=null){
+            return activeNetworkInfo.isAvailable();
+        }
+        return false ;
+    }
 
 
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
 
@@ -81,12 +83,30 @@ public  class SmsContent extends ContentObserver {
                     String address = cursor.getString(cursor.getColumnIndex("address"));
                     initialPos = lastID;
                     fixlist.add(initialPos);
-                    pasreSMS(body,uri,  address,initialPos);
+                    if(SystemUtil.isnetwork(mActivity)){
+                        pasreSMS(body,uri,  address,initialPos);
+                    }else{
+                        LogBean logBean=null;
+                        logBean=new LogBean();
+                        logBean.setCardNo("当前网络不可用");
+                        logBean.setCreateTime(new Date().getTime()+"");
+                        logBean.setAuthSate(2);
+                        logBean.setSmsSender(address);
+                        logBean.setSignKey(BaseConfigPreferences.getInstance(mActivity).getLoginSigin());
+                        logBean.save();
+                        Intent intent = new Intent();
+                        intent.setAction("com.pateo.mybroadcast");
+                        intent.putExtra("refresh",1);
+                        mActivity.sendBroadcast(intent);
+                    }
                     cursor.close();
                 }
             }
         }
     }
+
+
+
 
 
     public void pasreSMS(String body,Uri uri,String  smsSender,int smsId ){
@@ -131,6 +151,8 @@ public  class SmsContent extends ContentObserver {
                                 logBean.setAuthSate(2);
                             }else if(code==6001){
                                 msg="回调失败";
+                                logBean.setAuthSate(2);
+                            }else {
                                 logBean.setAuthSate(2);
                             }
                             logBean.save();

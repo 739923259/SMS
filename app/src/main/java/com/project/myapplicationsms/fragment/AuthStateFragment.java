@@ -144,7 +144,7 @@ public class AuthStateFragment extends BaseFragment {
                     .where("authSate==? and signKey==?", "2",BaseConfigPreferences.getInstance(getActivity()).getLoginSigin())
                     .order("createTime desc").limit(rows).offset((page-1)*rows).find(LogBean.class);
         }
-        Log.i("====",logBeans.size()+"");
+
         if(logBeans!=null&&logBeans.size()<rows){
             hasNext=false;
         }else{

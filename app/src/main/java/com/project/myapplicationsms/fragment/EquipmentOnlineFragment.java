@@ -1,8 +1,10 @@
 package com.project.myapplicationsms.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -33,6 +35,7 @@ import com.project.myapplicationsms.utils.MessageUtils;
 import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -55,9 +58,17 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
             //在这里执行定时需要的操作
           //  Log.i("====",flag+"");
             if (flag) {
-                InnerSorsiData();
+                if(SystemUtil.isnetwork(getActivity())){
+                    InnerSorsiData();
+                }else {
+                    Global.runInMainThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MessageUtils.show(getActivity(),"网络不可用");
+                        }
+                    });
+                }
                 mHandler.postDelayed(this, DELAY_TIME);
-
             }
         }
     };
@@ -91,6 +102,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
         tvEdit=view.findViewById(R.id.tv_edit);
         tvSubmit.setOnClickListener(this);
         tvSubmit1.setOnClickListener(this);
+        tvSubmit1.setVisibility(View.GONE);
         tvEdit.setOnClickListener(this);
         tvEdit.setVisibility(View.VISIBLE);
        String sigin= BaseConfigPreferences.getInstance(getActivity()).getLoginSigin();
@@ -107,7 +119,12 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
        }
 
        if(!TextUtils.isEmpty(url)&&!TextUtils.isEmpty(sigin)){
-           InnerHandlesData();
+           if(SystemUtil.isnetwork(getActivity())){
+               InnerHandlesData();
+           }else {
+               MessageUtils.show(getActivity(),"网络不可用");
+           }
+
        }
     }
 
@@ -290,7 +307,7 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
                                 MessageUtils.show(getActivity(),msg);
                                 setOnlineBtn(true,1);
                             }else{
-                                setOnlineBtn(false,0);
+                               // setOnlineBtn(false,0);
                                 MessageUtils.show(getActivity(),"心跳接口"+msg+"code:"+code);
                             }
                         }
@@ -319,13 +336,100 @@ public class EquipmentOnlineFragment  extends BaseFragment implements View.OnCli
 
 
 
+    public void pasreSMS(String body, Uri uri, String  smsSender, int smsId ){
+        String createTime=new Date().getTime()+"";
+        ThreadUtil.executeMore(new Runnable() {
+            @Override
+            public void run() {
+
+                ServerResult<UserLoginBean> visitRecordDetail = NetApiUtil.postSMS(getActivity(),smsSender,body,smsId);
+                Global.runInMainThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LogBean logBean=null;
+                        if(visitRecordDetail!=null&&visitRecordDetail.itemList!=null&&visitRecordDetail.itemList.size()>0){
+                            logBean=visitRecordDetail.itemList.get(0).getData();
+                        }
+                        if(logBean==null){
+                            logBean=new LogBean();
+                            logBean.setCreateTime(createTime);
+                            logBean.setSmsSender(smsSender);
+                        }
+                        logBean.setSignKey(BaseConfigPreferences.getInstance(getActivity()).getLoginSigin());
+                        if(visitRecordDetail!=null){
+                            int code=visitRecordDetail.getResultCode();
+                            String msg="";
+                            if(code==200){
+                                msg="短信上传成功";
+                                logBean.setAuthSate(1);
+                            }else if(code==4000){
+                                msg="解密失败";
+                                logBean.setAuthSate(2);
+                            }else if(code==5001){
+                                msg="待认证";
+                                logBean.setAuthSate(2);
+                            }else if(code==6001){
+                                msg="回调失败";
+                                logBean.setAuthSate(2);
+                            }
+                            logBean.save();
+                            if(code==200){
+                                MessageUtils.show(getActivity(),msg);
+                            }else{
+                                MessageUtils.show(getActivity(),msg+"code:"+code);
+                            }
+                            Intent intent = new Intent();
+                            intent.setAction("com.pateo.mybroadcast");
+                            intent.putExtra("refresh",1);
+                            getActivity().sendBroadcast(intent);
+                        }else{
+                            logBean.setAuthSate(2);
+                            logBean.save();
+                            Intent intent = new Intent();
+                            intent.setAction("com.pateo.mybroadcast");
+                            intent.putExtra("refresh",1);
+                            getActivity().sendBroadcast(intent);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.tv_submit){
-            stopTimer();
-            InnerHandlesData();
+            if(SystemUtil.isnetwork(getActivity())){
+                stopTimer();
+                InnerHandlesData();
+            }else {
+                MessageUtils.show(getActivity(),"网络不可用");
+            }
         }else if(v.getId()==R.id.tv_submit1){
+          //  String str="【招商银行】您账户0111于02月13日他行实时转入人民币299.85，付方余立源。推荐享好礼 cmbt.cn/yY7 。";
+           // String str="序号05的验证码491567，您向杨海琼尾号4766账户转账8900.0元。任何索要验证码的都是骗子，千万别给！[建设银行], smsId=8735)";
+        if(SystemUtil.isnetwork(getActivity())){
+            for(int i=0;i<10;i++){
+                //  String str="【招商银行】您账户0111于02月13日他行实时转入人民币299.92，付方郭志航。推荐享好礼 cmbt.cn/yY7 。";
+                String str="序号05的验证码491567，您向杨海琼尾号4766账户转账8900.0元。任何索要验证码的都是骗子，千万别给！[建设银行], smsId=8735)";
+                pasreSMS(str,null,"95533",967);
+                //pasreSMS(str,null,"95555",967);
+            }
+        }else {
+            LogBean logBean=null;
+            logBean=new LogBean();
+            logBean.setCardNo("当前网络不可用");
+            logBean.setCreateTime(new Date().getTime()+"");
+            logBean.setAuthSate(2);
+            logBean.setSmsSender("address");
+            logBean.setSignKey(BaseConfigPreferences.getInstance(getActivity()).getLoginSigin());
+            logBean.save();
+            Intent intent = new Intent();
+            intent.setAction("com.pateo.mybroadcast");
+            intent.putExtra("refresh",1);
+            getActivity().sendBroadcast(intent);
+        }
         }else if(v.getId()==R.id.tv_edit){
             tvSubmit.setText("上线");
             tvSubmit.setClickable(true);

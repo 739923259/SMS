@@ -52,7 +52,7 @@ public  class BankErrorAdapter extends BaseQuickAdapter<LogBean, BaseViewHolder>
         }
 
 
-        if(!TextUtils.isEmpty(item.getCreateTime())){
+        if(!TextUtils.isEmpty(item.getFomartime())){
             tvTime.setText(item.getFomartime());
         }else{
             tvTime.setText("");

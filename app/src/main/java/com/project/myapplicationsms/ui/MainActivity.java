@@ -2,10 +2,16 @@ package com.project.myapplicationsms.ui;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +38,7 @@ import com.project.myapplicationsms.http.NetApiUtil;
 import com.project.myapplicationsms.observe.MonitorService;
 import com.project.myapplicationsms.observe.SmsContent;
 import com.project.myapplicationsms.utils.LogUtils;
+import com.project.myapplicationsms.utils.SystemUtil;
 import com.project.myapplicationsms.utils.ThreadUtil;
 import com.project.myapplicationsms.widget.BottomBarView;
 
@@ -67,6 +74,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             }
         }
     };
+    private NetworkChange networkChange = null;
+    private SoundPool soundPool;
 
     @Override
     protected void setLayout() {
@@ -90,23 +99,46 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         SQLiteDatabase db = LitePal.getDatabase();
         setTimer();
         smsContent=new SmsContent(new Handler(),this);
-        getContentResolver().registerContentObserver(
-                Uri.parse("content://sms/"), true, smsContent);
-        //        for(int i=0;i<2;i++){
-//            LogBean logBean=new LogBean();
-//            logBean.setAmount("500");
-//            logBean.setCreateTime(new Date().getTime()+"");
-//            logBean.setBankName("中国银行");
-//            logBean.setCardNo("6777");
-//            logBean.setAuthSate(1);
-//
-//            logBean.save();
-//        }
-//        List<LogBean> allMovies = LitePal.findAll(LogBean.class);
-//        Log.i("====",allMovies.size()+"size");
-//
-//        Log.i("====",allMovies.size()+"size");
+        getContentResolver().registerContentObserver(Uri.parse("content://sms/"), true, smsContent);
         aaaaa();
+        listenerNetWorkChange();
+    }
+
+
+    private void listenerNetWorkChange() {
+        if (networkChange == null) {
+            IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);//网络状态改变的广播
+            networkChange = new NetworkChange();
+            registerReceiver(networkChange, intentFilter);
+        }
+    }
+
+    class NetworkChange extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (SystemUtil.isnetwork(context)) {
+                // Toast.makeText(MainActivity.this, "已连网！", Toast.LENGTH_LONG).show();
+            } else {
+                errorNetWorkTip();
+            }
+        }
+    }
+
+    private void errorNetWorkTip() {
+        try {
+            soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+            int id = 2;
+            id = soundPool.load(this, R.raw.neterror, 1);
+            int finalId = id;
+            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                    soundPool.play(finalId, 1, 1, 0, 0, 1);
+                }
+            });
+        } catch (Exception e) {
+        }
     }
 
 
@@ -277,5 +309,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             getContentResolver().unregisterContentObserver(smsContent);
         }
        stopTimer();
+       if (networkChange != null) {
+           unregisterReceiver(networkChange);
+       }
     }
 }

@@ -39,7 +39,7 @@ public  class AuthLogAdapter  extends BaseQuickAdapter<LogBean, BaseViewHolder> 
         TextView tvMoney=helper.getView(R.id.tv_money);
         TextView tvTime=helper.getView(R.id.tv_time);
         TextView tvSmsAddress=helper.getView(R.id.tv_sms_address);
-
+        try {
         if(!TextUtils.isEmpty(item.getSmsSender())){
             tvSmsAddress.setText(item.getSmsSender());
         }else{
@@ -66,11 +66,16 @@ public  class AuthLogAdapter  extends BaseQuickAdapter<LogBean, BaseViewHolder> 
         }
 
 
-        if(!TextUtils.isEmpty(item.getCreateTime())){
-            tvTime.setText(simpleDateFormat.format(new Date(Long.valueOf(item.getCreateTime()))));
-        }else{
-            tvTime.setText("");
+
+            if(!TextUtils.isEmpty(item.getCreateTime())){
+                tvTime.setText(simpleDateFormat.format(new Date(Long.valueOf(item.getCreateTime()))));
+            }else{
+                tvTime.setText("");
+            }
+        }catch (Exception e){
+
         }
+
     }
 
 
